@@ -1,0 +1,12 @@
+[
+	{
+		name : Game,
+		icon : "",
+		file : "Game.layout"
+	},
+	{
+		name : Editor,
+		icon : "",
+		file : "Editor.layout"
+	}
+]

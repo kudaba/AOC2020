@@ -1,0 +1,17 @@
+.temp
+.git
+
+.vscode
+
+**/.vs
+**/obj
+**/output
+**/*.sln
+**/*.csproj
+**/*.csproj.user
+**/*.vcxproj
+**/*.vcxproj.user
+**/*.androidproj
+**/*.androidproj.user
+*_runtimedependencies.txt
+packages.config
