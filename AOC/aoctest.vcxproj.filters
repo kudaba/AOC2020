@@ -5,10 +5,16 @@
     <ClCompile Include="AOC_Day1.cpp">
       <Filter>Week1</Filter>
     </ClCompile>
+    <ClCompile Include="AOC_Day2.cpp">
+      <Filter>Week1</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AOC_Precompiled.h" />
     <ClInclude Include="AOC_Day1.h">
+      <Filter>Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day2.h">
       <Filter>Week1</Filter>
     </ClInclude>
   </ItemGroup>
