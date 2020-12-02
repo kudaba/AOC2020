@@ -8,6 +8,75 @@
     <ClCompile Include="AOC_Day2.cpp">
       <Filter>Week1</Filter>
     </ClCompile>
+    <ClCompile Include="AOC_Day3.cpp">
+      <Filter>Week1</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day4.cpp">
+      <Filter>Week1</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day5.cpp">
+      <Filter>Week1</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day6.cpp">
+      <Filter>Week1</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day7.cpp">
+      <Filter>Week1</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day8.cpp">
+      <Filter>Week2</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day9.cpp">
+      <Filter>Week2</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day10.cpp">
+      <Filter>Week2</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day11.cpp">
+      <Filter>Week2</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day12.cpp">
+      <Filter>Week2</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day13.cpp">
+      <Filter>Week2</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day14.cpp">
+      <Filter>Week2</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day15.cpp">
+      <Filter>Week3</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day16.cpp">
+      <Filter>Week3</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day17.cpp">
+      <Filter>Week3</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day18.cpp">
+      <Filter>Week3</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day19.cpp">
+      <Filter>Week3</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day20.cpp">
+      <Filter>Week3</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day21.cpp">
+      <Filter>Week3</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day22.cpp">
+      <Filter>Week4</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day23.cpp">
+      <Filter>Week4</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day24.cpp">
+      <Filter>Week4</Filter>
+    </ClCompile>
+    <ClCompile Include="AOC_Day25.cpp">
+      <Filter>Week4</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AOC_Precompiled.h" />
@@ -17,10 +86,88 @@
     <ClInclude Include="AOC_Day2.h">
       <Filter>Week1</Filter>
     </ClInclude>
+    <ClInclude Include="AOC_Day3.h">
+      <Filter>Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day4.h">
+      <Filter>Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day5.h">
+      <Filter>Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day6.h">
+      <Filter>Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day7.h">
+      <Filter>Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day8.h">
+      <Filter>Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day9.h">
+      <Filter>Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day10.h">
+      <Filter>Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day11.h">
+      <Filter>Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day12.h">
+      <Filter>Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day13.h">
+      <Filter>Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day14.h">
+      <Filter>Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day15.h">
+      <Filter>Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day16.h">
+      <Filter>Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day17.h">
+      <Filter>Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day18.h">
+      <Filter>Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day19.h">
+      <Filter>Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day20.h">
+      <Filter>Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day21.h">
+      <Filter>Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day22.h">
+      <Filter>Week4</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day23.h">
+      <Filter>Week4</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day24.h">
+      <Filter>Week4</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day25.h">
+      <Filter>Week4</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Week1">
       <UniqueIdentifier>{d9584676-44de-4afa-bfa3-366dd607244e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Week2">
+      <UniqueIdentifier>{e6248201-0580-4584-92a3-392832e6581c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Week3">
+      <UniqueIdentifier>{0005c586-ce8b-4bd2-b3bc-233517bee5fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Week4">
+      <UniqueIdentifier>{d10b4a22-c2be-43d0-9c71-796e6c989fcf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
