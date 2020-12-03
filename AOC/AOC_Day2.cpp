@@ -27,7 +27,7 @@ static uint locGetValidPW(char const* data)
 	return valid;
 }
 
-DEFINE_TEST(Day2Part1)
+DEFINE_TEST_G(Part1, Day2)
 {
 	TEST_EQ(locGetValidPW(testData), 2);
 	GC_String text;
@@ -53,7 +53,7 @@ static uint locGetValidPW2(char const* data)
 	return valid;
 }
 
-DEFINE_TEST(Day2Part2)
+DEFINE_TEST_G(Part2, Day2)
 {
 	TEST_EQ(locGetValidPW2(testData), 1);
 	GC_String text;

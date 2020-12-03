@@ -12,7 +12,7 @@ uint locGetProduct(uint(&data)[Count])
 	return 0;
 }
 
-DEFINE_TEST(Day1Part1)
+DEFINE_TEST_G(Part1, Day1)
 {
 	TEST_EQ(locGetProduct(theTestData), 514579);
 	TEST_EQ(locGetProduct(thePart1Data), 982464);
@@ -31,7 +31,7 @@ uint locGet3Product(uint(&data)[Count])
 	return 0;
 }
 
-DEFINE_TEST(Day1Part2)
+DEFINE_TEST_G(Part2, Day1)
 {
 	TEST_EQ(locGet3Product(theTestData), 241861950);
 	TEST_EQ(locGet3Product(thePart1Data), 162292410);

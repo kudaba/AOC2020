@@ -1,12 +1,12 @@
 #include "AOC_Precompiled.h"
 #include "AOC_Day12.h"
 
-DEFINE_TEST(Day12Part1)
+DEFINE_TEST_G(Part1, Day12)
 {
 
 }
 
-DEFINE_TEST(Day12Part2)
+DEFINE_TEST_G(Part2, Day12)
 {
 
 }
