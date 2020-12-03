@@ -19,6 +19,11 @@ DEFINE_TEST_G(Part1, Day3)
 {
 	TEST_EQ(countTrees(testInput, 3), 7);
 	TEST_EQ(countTrees(part1Input, 3), 203);
+
+	uint trees = 0, offset = 0;
+	for (auto line : GC_File::ReadAllLines("AOC_Day3Part1.txt"))
+		trees += line[offset%line.Count()] == '#', offset += 3;
+	TEST_EQ(trees, 203);
 }
 
 template <uint Size>

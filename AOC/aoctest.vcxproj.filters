@@ -170,4 +170,9 @@
       <UniqueIdentifier>{d10b4a22-c2be-43d0-9c71-796e6c989fcf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="AOC_Day3Part1.txt">
+      <Filter>Week1</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

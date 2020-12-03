@@ -51,6 +51,7 @@ namespace Template
 		public override void AddProjects(Configuration conf, Target target)
 		{
 			GameExampleSolution.AddDefaultProject<AOCProject>(conf, target);
+			conf.AddProject<GameCoreTestProject>(target);
 		}
 	}
 
