@@ -1,3 +1,4 @@
-[submodule "GameCore"]
-	path = GameCore
-url=https://github.com/kudaba/Graphium
+[submodule "Graphium"]
+	path = Graphium
+	url = https://github.com/kudaba/Graphium
+	branch = master
