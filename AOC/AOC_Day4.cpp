@@ -1,110 +1,79 @@
 #include "AOC_Precompiled.h"
 #include "AOC_Day4.h"
 
-uint numValid(char const* file, GC_Func<bool(uint, GC_StrSlice)> validFunc)
+using TestFn = GC_Func<bool(GC_String const& k, GC_String const& v)>;
+TestFn fieldsP1[] = {
+	[](GC_String const& k, GC_String const&) { return k == "byr"; },
+	[](GC_String const& k, GC_String const&) { return k == "iyr"; },
+	[](GC_String const& k, GC_String const&) { return k == "eyr"; },
+	[](GC_String const& k, GC_String const&) { return k == "hgt"; },
+	[](GC_String const& k, GC_String const&) { return k == "hcl"; },
+	[](GC_String const& k, GC_String const&) { return k == "ecl"; },
+	[](GC_String const& k, GC_String const&) { return k == "pid"; },
+	//"cid",
+};
+
+char const* eyes[] = {
+	"amb",
+	"blu",
+	"brn",
+	"gry",
+	"grn",
+	"hzl",
+	"oth",
+};
+
+TestFn fieldsP2[] = {
+	[](GC_String const& k, GC_String const& v) { return k == "byr" && GC_InRange(GC_Atoi(v), 1920, 2002); },
+	[](GC_String const& k, GC_String const& v) { return k == "iyr" && GC_InRange(GC_Atoi(v), 2010, 2020); },
+	[](GC_String const& k, GC_String const& v) { return k == "eyr" && GC_InRange(GC_Atoi(v), 2020, 2030); },
+	[](GC_String const& k, GC_String const& v) { return k == "hgt" && (v.EndsWith("cm") ? GC_InRange(GC_Atoi(v), 150, 193) : (v.EndsWith("in") ? GC_InRange(GC_Atoi(v), 59, 76) : false)); },
+	[](GC_String const& k, GC_String const& v) { return k == "hcl" && v.Length() == 7 && v.StartsWith("#") && GC_Algorithm::All(GC_StrSlice(v.ToString() + 1, 6), GC_IsHexDigit); },
+	[](GC_String const& k, GC_String const& v) { return k == "ecl" && GC_Algorithm::Contains(eyes, v); },
+	[](GC_String const& k, GC_String const& v) { return k == "pid" && v.Length() == 9 && GC_Algorithm::All(v, GC_IsDigit); },
+	//"cid",
+};
+
+template <uint Size>
+uint numValid(char const* file, TestFn (&validFunc)[Size])
 {
-	auto lines = GC_File::ReadAllLines(file);
-
 	uint validCount = 0;
-	bool fieldsSet[GC_ARRAY_COUNT(fields)] = { false };
-	fieldsSet[GC_ARRAY_COUNT(fields)-1] = true;
+	GC_String text;
+	GC_File::ReadAllText(file, text);
 
-	for (auto line : lines)
+	GC_String key, value;
+	for (GC_StrSlice pp; GC_Strtok(text, "\n\n", pp);)
 	{
-		if (line.Count() == 0)
+		uint fieldsSet = 0;
+		bool fieldsValid[GC_ARRAY_COUNT(validFunc)] = { false };
+		for (GC_StrSlice kvp; GC_Strtoks(pp, " \n", kvp);)
 		{
-			bool valid = true;
-			for (bool b : fieldsSet)
-				valid &= b;
-			if (valid)
-				validCount++;
-
-			GC_MemZero(fieldsSet);
-			fieldsSet[GC_ARRAY_COUNT(fields)-1] = true;
+			GC_StrSlice tok;
+			GC_Strtok(kvp, ":", tok); key = tok;
+			GC_Strtok(kvp, ":", tok); value = tok;
+			for_index(auto f : validFunc)
+				if (!fieldsValid[i] && f(key, value))
+				{
+					fieldsValid[i] = true;
+					++fieldsSet;
+					break;
+				}
 		}
-		else
-		{
-			GC_StrSlice pair;
-			while (GC_Strtok(line, " ", pair))
-			{
-				GC_StrSlice key;
-				GC_Strtok(pair, ":", key);
-				GC_StrSlice value = key;
-				GC_Strtok(pair, ":", value);
 
-				for_index(char const* f : fields)
-					if (GC_Strneq(key.Buffer(), f, 3) && !fieldsSet[i])
-					{
-						fieldsSet[i] = validFunc(i, value);
-						break;
-					}
-			}
-		}
+		validCount += fieldsSet == GC_ARRAY_COUNT(validFunc);
 	}
-
 	return validCount;
 }
 
 DEFINE_TEST_G(Part1, Day4)
 {
-	TEST_EQ(numValid("AOC_Day4_Test.txt", [](auto, auto) {return true; }), 2);
-	TEST_EQ(numValid("AOC_Day4Part1.txt", [](auto, auto) {return true; }), 182);
-}
-
-bool veryValid(uint key, GC_StrSlice valueStr)
-{
-	bool valid = false;
-	GC_StaticString<128> value = valueStr;
-
-	switch (key)
-	{
-	case 0:
-		valid = GC_InRange(GC_Atoi(value), 1920, 2002);
-		break;
-	case 1:
-		valid = GC_InRange(GC_Atoi(value), 2010, 2020);
-		break;
-	case 2:
-		valid = GC_InRange(GC_Atoi(value), 2020, 2030);
-		break;
-	case 3:
-		if (value.EndsWith("cm"))
-			valid = GC_InRange(GC_Atoi(value), 150, 193);
-		else if (value.EndsWith("in"))
-			valid = GC_InRange(GC_Atoi(value), 59, 76);
-		break;
-	case 4:
-		if (value.StartsWith("#") && valueStr.Count() == 7)
-		{
-			valid = true;
-			for (uint j = 1; j < 7; ++j)
-				valid &= GC_IsHexDigit(value[j]);
-		}
-		break;
-	case 5:
-		for (char const* eye : eyes)
-			if (value == eye)
-			{
-				valid = true;
-				break;
-			}
-		break;
-	case 6:
-		if (valueStr.Count() == 9)
-		{
-			valid = true;
-			for (uint j = 0; j < 9; ++j)
-				valid &= GC_IsDigit(value[j]);
-		}
-		break;
-	}
-
-	return valid;
+	TEST_EQ(numValid("AOC_Day4_Test.txt", fieldsP1), 2);
+	TEST_EQ(numValid("AOC_Day4Part1.txt", fieldsP1), 182);
 }
 
 DEFINE_TEST_G(Part2, Day4)
 {
-	TEST_EQ(numValid("AOC_Day4_TestGood.txt", veryValid), 4);
-	TEST_EQ(numValid("AOC_Day4_TestBad.txt", veryValid), 0);
-	TEST_EQ(numValid("AOC_Day4Part1.txt", veryValid), 109);
+	TEST_EQ(numValid("AOC_Day4_TestGood.txt", fieldsP2), 4);
+	TEST_EQ(numValid("AOC_Day4_TestBad.txt", fieldsP2), 0);
+	TEST_EQ(numValid("AOC_Day4Part1.txt", fieldsP2), 109);
 }
