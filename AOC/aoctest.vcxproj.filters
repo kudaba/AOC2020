@@ -174,5 +174,17 @@
     <Text Include="AOC_Day3Part1.txt">
       <Filter>Week1</Filter>
     </Text>
+    <Text Include="AOC_Day4Part1.txt">
+      <Filter>Week1</Filter>
+    </Text>
+    <Text Include="AOC_Day4_Test.txt">
+      <Filter>Week1</Filter>
+    </Text>
+    <Text Include="AOC_Day4_TestBad.txt">
+      <Filter>Week1</Filter>
+    </Text>
+    <Text Include="AOC_Day4_TestGood.txt">
+      <Filter>Week1</Filter>
+    </Text>
   </ItemGroup>
 </Project>

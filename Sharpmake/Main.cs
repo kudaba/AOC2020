@@ -26,6 +26,7 @@ namespace Template
 			TestProject = "AOC";
 			ShortName = "AOC";
 			SourceRootPath = @"[project.ToRoot]\[project.TestProject]";
+			SourceFilesExtensions.Add("txt");
 		}
 
 		public override void ConfigureAll(Configuration conf, Target target)
