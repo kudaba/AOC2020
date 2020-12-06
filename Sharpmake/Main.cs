@@ -1,5 +1,5 @@
 using Sharpmake;
-using GameCore;
+using Graphium;
 
 //-------------------------------------------------------------------------------------------------
 // Pull in Graphium's Sharpmake files as a separate project
@@ -32,7 +32,7 @@ namespace Template
 		public override void ConfigureAll(Configuration conf, Target target)
 		{
 			base.ConfigureAll(conf, target);
-			conf.AddPrivateDependency<GameCoreProject>(target);
+			conf.AddPrivateDependency<GraphiumCoreProject>(target);
 			conf.SolutionFolder = "AOC";
 		}
 	}
@@ -51,8 +51,8 @@ namespace Template
 
 		public override void AddProjects(Configuration conf, Target target)
 		{
-			GameExampleSolution.AddDefaultProject<AOCProject>(conf, target);
-			conf.AddProject<GameCoreTestProject>(target);
+			GraphiumExampleGameSolution.AddDefaultProject<AOCProject>(conf, target);
+			conf.AddProject<GraphiumCoreTestProject>(target);
 		}
 	}
 
