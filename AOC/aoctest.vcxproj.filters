@@ -119,12 +119,6 @@
     <ClInclude Include="AOC_Day7.h">
       <Filter>Week1\Day7</Filter>
     </ClInclude>
-    <ClInclude Include="AOC_Day5Part1.txt" />
-    <ClInclude Include="AOC_Day5Test.txt" />
-    <ClInclude Include="AOC_Day6Part1.txt" />
-    <ClInclude Include="AOC_Day6Test.txt" />
-    <ClInclude Include="AOC_Day7Part1.txt" />
-    <ClInclude Include="AOC_Day7Test.txt" />
     <ClInclude Include="AOC_Day8.h">
       <Filter>Week2\Day8</Filter>
     </ClInclude>
@@ -178,6 +172,63 @@
     </ClInclude>
     <ClInclude Include="AOC_Day25.h">
       <Filter>Week4\Day25</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day10Part1.txt" />
+    <ClInclude Include="AOC_Day10Test.txt" />
+    <ClInclude Include="AOC_Day11Part1.txt" />
+    <ClInclude Include="AOC_Day11Test.txt" />
+    <ClInclude Include="AOC_Day12Part1.txt" />
+    <ClInclude Include="AOC_Day12Test.txt" />
+    <ClInclude Include="AOC_Day13Part1.txt" />
+    <ClInclude Include="AOC_Day13Test.txt" />
+    <ClInclude Include="AOC_Day14Part1.txt" />
+    <ClInclude Include="AOC_Day14Test.txt" />
+    <ClInclude Include="AOC_Day15Part1.txt" />
+    <ClInclude Include="AOC_Day15Test.txt" />
+    <ClInclude Include="AOC_Day16Part1.txt" />
+    <ClInclude Include="AOC_Day16Test.txt" />
+    <ClInclude Include="AOC_Day17Part1.txt" />
+    <ClInclude Include="AOC_Day17Test.txt" />
+    <ClInclude Include="AOC_Day18Part1.txt" />
+    <ClInclude Include="AOC_Day18Test.txt" />
+    <ClInclude Include="AOC_Day19Part1.txt" />
+    <ClInclude Include="AOC_Day19Test.txt" />
+    <ClInclude Include="AOC_Day20Part1.txt" />
+    <ClInclude Include="AOC_Day20Test.txt" />
+    <ClInclude Include="AOC_Day21Part1.txt" />
+    <ClInclude Include="AOC_Day21Test.txt" />
+    <ClInclude Include="AOC_Day22Part1.txt" />
+    <ClInclude Include="AOC_Day22Test.txt" />
+    <ClInclude Include="AOC_Day23Part1.txt" />
+    <ClInclude Include="AOC_Day23Test.txt" />
+    <ClInclude Include="AOC_Day24Part1.txt" />
+    <ClInclude Include="AOC_Day24Test.txt" />
+    <ClInclude Include="AOC_Day25Part1.txt" />
+    <ClInclude Include="AOC_Day25Test.txt" />
+    <ClInclude Include="AOC_Day8Part1.txt" />
+    <ClInclude Include="AOC_Day8Test.txt" />
+    <ClInclude Include="AOC_Day9Part1.txt" />
+    <ClInclude Include="AOC_Day9Test.txt" />
+    <ClInclude Include="AOC_Day7Part1.txt">
+      <Filter>Week1\Day7</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day7Test.txt">
+      <Filter>Week1\Day7</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day7Test2.txt">
+      <Filter>Week1\Day7</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day5Part1.txt">
+      <Filter>Week1\Day5</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day5Test.txt">
+      <Filter>Week1\Day5</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day6Part1.txt">
+      <Filter>Week1\Day6</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day6Test.txt">
+      <Filter>Week1\Day6</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -268,115 +319,5 @@
     <Filter Include="Week4\Day25">
       <UniqueIdentifier>{455b24c2-d29c-4b7d-a2f4-35fd2831c936}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="AOC_Day8Test.txt">
-      <Filter>Week2\Day8</Filter>
-    </Text>
-    <Text Include="AOC_Day9Test.txt">
-      <Filter>Week2\Day9</Filter>
-    </Text>
-    <Text Include="AOC_Day10Test.txt">
-      <Filter>Week2\Day10</Filter>
-    </Text>
-    <Text Include="AOC_Day11Test.txt">
-      <Filter>Week2\Day11</Filter>
-    </Text>
-    <Text Include="AOC_Day12Test.txt">
-      <Filter>Week2\Day12</Filter>
-    </Text>
-    <Text Include="AOC_Day13Test.txt">
-      <Filter>Week2\Day13</Filter>
-    </Text>
-    <Text Include="AOC_Day14Test.txt">
-      <Filter>Week2\Day14</Filter>
-    </Text>
-    <Text Include="AOC_Day8Part1.txt">
-      <Filter>Week2\Day8</Filter>
-    </Text>
-    <Text Include="AOC_Day9Part1.txt">
-      <Filter>Week2\Day9</Filter>
-    </Text>
-    <Text Include="AOC_Day10Part1.txt">
-      <Filter>Week2\Day10</Filter>
-    </Text>
-    <Text Include="AOC_Day11Part1.txt">
-      <Filter>Week2\Day11</Filter>
-    </Text>
-    <Text Include="AOC_Day12Part1.txt">
-      <Filter>Week2\Day12</Filter>
-    </Text>
-    <Text Include="AOC_Day13Part1.txt">
-      <Filter>Week2\Day13</Filter>
-    </Text>
-    <Text Include="AOC_Day14Part1.txt">
-      <Filter>Week2\Day14</Filter>
-    </Text>
-    <Text Include="AOC_Day15Part1.txt">
-      <Filter>Week3\Day15</Filter>
-    </Text>
-    <Text Include="AOC_Day16Part1.txt">
-      <Filter>Week3\Day16</Filter>
-    </Text>
-    <Text Include="AOC_Day17Part1.txt">
-      <Filter>Week3\Day17</Filter>
-    </Text>
-    <Text Include="AOC_Day19Part1.txt">
-      <Filter>Week3\Day19</Filter>
-    </Text>
-    <Text Include="AOC_Day20Part1.txt">
-      <Filter>Week3\Day20</Filter>
-    </Text>
-    <Text Include="AOC_Day21Part1.txt">
-      <Filter>Week3\Day21</Filter>
-    </Text>
-    <Text Include="AOC_Day22Part1.txt">
-      <Filter>Week4\Day22</Filter>
-    </Text>
-    <Text Include="AOC_Day24Part1.txt">
-      <Filter>Week4\Day24</Filter>
-    </Text>
-    <Text Include="AOC_Day25Part1.txt">
-      <Filter>Week4\Day25</Filter>
-    </Text>
-    <Text Include="AOC_Day15Test.txt">
-      <Filter>Week3\Day15</Filter>
-    </Text>
-    <Text Include="AOC_Day16Test.txt">
-      <Filter>Week3\Day16</Filter>
-    </Text>
-    <Text Include="AOC_Day17Test.txt">
-      <Filter>Week3\Day17</Filter>
-    </Text>
-    <Text Include="AOC_Day18Test.txt">
-      <Filter>Week3\Day18</Filter>
-    </Text>
-    <Text Include="AOC_Day19Test.txt">
-      <Filter>Week3\Day19</Filter>
-    </Text>
-    <Text Include="AOC_Day20Test.txt">
-      <Filter>Week3\Day20</Filter>
-    </Text>
-    <Text Include="AOC_Day21Test.txt">
-      <Filter>Week3\Day21</Filter>
-    </Text>
-    <Text Include="AOC_Day22Test.txt">
-      <Filter>Week4\Day22</Filter>
-    </Text>
-    <Text Include="AOC_Day23Test.txt">
-      <Filter>Week4\Day23</Filter>
-    </Text>
-    <Text Include="AOC_Day24Test.txt">
-      <Filter>Week4\Day24</Filter>
-    </Text>
-    <Text Include="AOC_Day25Test.txt">
-      <Filter>Week4\Day25</Filter>
-    </Text>
-    <Text Include="AOC_Day18Part1.txt">
-      <Filter>Week3\Day18</Filter>
-    </Text>
-    <Text Include="AOC_Day23Part1.txt">
-      <Filter>Week4\Day23</Filter>
-    </Text>
   </ItemGroup>
 </Project>
