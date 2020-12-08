@@ -77,6 +77,9 @@
     <ClCompile Include="AOC_Day25.cpp">
       <Filter>Week4\Day25</Filter>
     </ClCompile>
+    <ClCompile Include="AOC_Program.cpp">
+      <Filter>Program</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AOC_Precompiled.h" />
@@ -301,6 +304,8 @@
     </ClInclude>
     <ClInclude Include="AOC_Day25Test.txt">
       <Filter>Week4\Day25</Filter>
+    <ClInclude Include="AOC_Program.h">
+      <Filter>Program</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +395,9 @@
     </Filter>
     <Filter Include="Week4\Day25">
       <UniqueIdentifier>{455b24c2-d29c-4b7d-a2f4-35fd2831c936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Program">
+      <UniqueIdentifier>{0786c89b-8666-4ab0-80f7-15158c72077f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
