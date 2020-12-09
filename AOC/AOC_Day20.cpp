@@ -1,7 +1,7 @@
 #include "AOC_Precompiled.h"
 #include "AOC_Day20.h"
 
-static uint lodDay20Part1(char const* aFile)
+static uint locDay20Part1(char const* aFile)
 {
 	uint result = 0;
 
@@ -22,8 +22,8 @@ static uint lodDay20Part1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day20)
 {
-	TEST_EQ(lodDay20Part1("AOC_Day20Test.txt"), 0);
-	TEST_EQ(lodDay20Part1("AOC_Day20Part1.txt"), 0);
+	TEST_EQ(locDay20Part1("AOC_Day20Test.txt"), 0);
+	TEST_EQ(locDay20Part1("AOC_Day20Part1.txt"), 0);
 }
 
 static uint locDay20Part2(char const* aFile)

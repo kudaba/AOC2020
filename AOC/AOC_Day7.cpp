@@ -1,7 +1,7 @@
 #include "AOC_Precompiled.h"
 #include "AOC_Day7.h"
 
-static uint lodDay7Part1(char const* aFile)
+static uint locDay7Part1(char const* aFile)
 {
 	uint result = 0;
 	GC_HashMap<GC_String, GC_HashSet<GC_String>> owningBagMap;
@@ -59,8 +59,8 @@ static uint lodDay7Part1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day7)
 {
-	TEST_EQ(lodDay7Part1("AOC_Day7Test.txt"), 4);
-	TEST_EQ(lodDay7Part1("AOC_Day7Part1.txt"), 172);
+	TEST_EQ(locDay7Part1("AOC_Day7Test.txt"), 4);
+	TEST_EQ(locDay7Part1("AOC_Day7Part1.txt"), 172);
 }
 
 static uint locCountBags(char const* bag, GC_HashMap<GC_String, GC_HashMap<GC_String, uint>> const& owningBagMap)

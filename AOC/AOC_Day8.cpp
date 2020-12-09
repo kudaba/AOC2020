@@ -2,7 +2,7 @@
 #include "AOC_Day8.h"
 #include "AOC_Program.h"
 
-static uint lodDay8Part1(char const* aFile)
+static uint locDay8Part1(char const* aFile)
 {
 	Program prog;
 	prog.Load(aFile);
@@ -15,8 +15,8 @@ static uint lodDay8Part1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day8)
 {
-	TEST_EQ(lodDay8Part1("AOC_Day8Test.txt"), 5);
-	TEST_EQ(lodDay8Part1("AOC_Day8Part1.txt"), 1384);
+	TEST_EQ(locDay8Part1("AOC_Day8Test.txt"), 5);
+	TEST_EQ(locDay8Part1("AOC_Day8Part1.txt"), 1384);
 }
 
 static uint locDay8Part2(char const* aFile)
