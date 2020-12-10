@@ -304,6 +304,7 @@
     </ClInclude>
     <ClInclude Include="AOC_Day25Test.txt">
       <Filter>Week4\Day25</Filter>
+    </ClInclude>
     <ClInclude Include="AOC_Program.h">
       <Filter>Program</Filter>
     </ClInclude>
@@ -399,5 +400,10 @@
     <Filter Include="Program">
       <UniqueIdentifier>{0786c89b-8666-4ab0-80f7-15158c72077f}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="AOC_Day10Test2.txt">
+      <Filter>Week2\Day10</Filter>
+    </Text>
   </ItemGroup>
 </Project>
