@@ -405,5 +405,8 @@
     <Text Include="AOC_Day10Test2.txt">
       <Filter>Week2\Day10</Filter>
     </Text>
+    <Text Include="AOC_Day14Test2.txt">
+      <Filter>Week2\Day14</Filter>
+    </Text>
   </ItemGroup>
 </Project>
