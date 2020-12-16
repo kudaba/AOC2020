@@ -1,29 +1,58 @@
 #include "AOC_Precompiled.h"
 #include "AOC_Day15.h"
 
-static uint locDay15(char const* aFile, uint count)
+GC_FORCEINLINE uint32 GC_GetHash(uint anItem) { return anItem; }
+
+static uint locDay15(char const* aFile, uint const count)
 {
+	FINAL_ONLY(GC_HighResTimer timer);
+
 	GC_String text;
 	GC_File::ReadAllText(aFile, text);
 
-	GC_DynamicArray<uint> spokenMap;
-	spokenMap.Resize(count);
+	uint const smallSize = count / 10;
+
+	GC_DynamicArray<uint> spokenArray;
+	spokenArray.Resize(smallSize);
+	GC_MemZero(spokenArray.Buffer(), spokenArray.SizeInBytes());
+
+	GC_HashMap<uint,uint> spokenMap;
+	spokenMap.Reserve(count / 5);
 
 	uint i = 1;
 	for (GC_StrSlice chunk; GC_Strtok(text, ",", chunk); i++)
 	{
-		spokenMap[GC_Atoi(chunk)] = i;
+		spokenArray[GC_Atoi(chunk)] = i;
 	}
+
+	FINAL_ONLY(GC_TestFixture::GetCurrentTest()->Printf("Startup Time: %d\n", timer.GetElapsedMillis()));
+	FINAL_ONLY(timer.Reset());
 
 	uint last = 0;
 
 	for (; i < count; ++i)
 	{
-		uint index = spokenMap[last];
-		spokenMap[last] = i;
-		last = (i - index) * !!index;
+		bool isNew;
+		uint index;
+
+		if (last < smallSize)
+		{
+			index = spokenArray[last];
+			spokenArray[last] = i;
+			isNew = index == 0;
+		}
+		else
+		{
+			auto item = spokenMap.Add(last);
+			isNew = item.myFirst;
+			index = *item.mySecond;
+			*item.mySecond = i;
+		}
+
+		last = isNew ? 0 : (i - index);
 	}
 
+	FINAL_ONLY(GC_TestFixture::GetCurrentTest()->Printf("Runtime Time: %d\n", timer.GetElapsedMillis()));
 	return last;
 }
 
