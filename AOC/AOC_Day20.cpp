@@ -64,25 +64,17 @@ struct Tile
 		}
 	}
 
-	template <typename T> 
-	void Reverse(T const& range)
-	{
-		if (range.Count())
-			for (uint i = 0, e = range.Count() - 1; i < e; ++i, --e)
-				GC_Swap(range[i], range[e]);
-	}
-
 	void FlipX()
 	{
 		GC_Swap(Sides[1], Sides[3]);
 		for_range(Bits.Height())
-			Reverse(Bits.Row(i));
+			GC_Algorithm::Reverse(Bits.Row(i));
 	}
 	void FlipY()
 	{
 		GC_Swap(Sides[0], Sides[2]);
 		for_range(Bits.Width())
-			Reverse(Bits.Column(i));
+			GC_Algorithm::Reverse(Bits.Column(i));
 	}
 };
 
