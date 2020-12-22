@@ -55,40 +55,33 @@ DEFINE_TEST_G(Part1, Day22)
 	TEST_EQ(locDay22Part1("AOC_Day22Part1.txt"), 31314);
 }
 
+using Hand = GC_HybridArray<uint, 50>;
 struct Round
 {
-	GC_HybridArray<uint, 50> P1;
-	GC_HybridArray<uint, 50> P2;
-
-	bool operator==(Round const& other) const
-	{
-		return GC_Algorithm::Equal(P1, other.P1) && GC_Algorithm::Equal(P2, other.P2);
-	}
+	Hand P1;
+	Hand P2;
 };
 
-inline uint32 GC_GetHash(Round const& anItem, uint32 aSeed = 0)
+inline uint32 GC_GetHash(Hand const& anItem, uint32 aSeed = 0)
 {
-	bool player = true;
-	aSeed = GC_FastHash(&player, 1, aSeed);
-	aSeed = GC_FastHash(anItem.P1.Buffer(), anItem.P1.SizeInBytes(), aSeed);
-	player = false;
-	aSeed = GC_FastHash(&player, 1, aSeed);
-	aSeed = GC_FastHash(anItem.P2.Buffer(), anItem.P2.SizeInBytes(), aSeed);
+	aSeed = GC_FastHash(anItem.Buffer(), anItem.SizeInBytes(), aSeed);
 	return aSeed;
 }
-
-using Rounds = GC_HashSet<Round>;
+bool operator==(Hand const& lhs, Hand const& rhs)
+{
+	return GC_Algorithm::Equal(lhs, rhs);
+}
 
 static bool locRecursiveCombat(Round& round)
 {
 	auto& player1 = round.P1;
 	auto& player2 = round.P2;
 
-	Rounds rounds;
+	GC_HashSet<Hand> rounds;
 
 	while (player1.Count() && player2.Count())
 	{
-		if (!rounds.Add(round))
+		if (!rounds.Add(round.P1))
 			return true;
 
 		uint p1 = player1[0];
