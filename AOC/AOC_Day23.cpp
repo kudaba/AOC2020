@@ -63,90 +63,84 @@ DEFINE_TEST_G(Part1, Day23)
 	TEST_EQ(locDay23Part1("AOC_Day23Part1.txt", 100), 95648732);
 }
 
-struct Link
-{
-	uint Value;
-	Link* Next;
-};
-
-constexpr uint GC_HashKeyResolver(Link* anItem) { return anItem->Value; }
-
 static uint64 locDay23Part2(char const* aFile, uint numCups, uint numLoops, bool part1)
 {
-	GC_ScopedArray<Link> links = new Link[numCups];
-	GC_HashSet<Link*> linkMap;
-	linkMap.Reserve(numCups);
+	GC_DynamicArray<uint> cups;
+	cups.Resize(numCups + 1);
 
 	GC_String text;
 	GC_File::ReadAllText(aFile, text);
-	GC_DynamicArray<uint> cups;
 
-	uint linkIndex = 0;
-	Link* current = &links[0];
-	Link* prev = &links[numCups - 1];
-	prev->Next = current;
+	uint linkIndex = 1;
+	uint current = 0;
+	uint prev = numCups;
 
 	for (char c : text)
 	{
 		if (c == '\n')
 			break;
 
-		Link* link = &links[linkIndex++];
-		link->Value = c - '0';
-		prev->Next = link;
-		prev = link;
-		linkMap.Add(link);
+		uint cup = c - '0';
+
+		if (!current)
+			current = cup;
+
+		cups[prev] = cup;
+		prev = cup;
+
+		++linkIndex;
 	}
 
-	while (linkIndex < numCups)
+	while (linkIndex <= numCups)
 	{
-		Link* link = &links[linkIndex++];
-		link->Value = linkIndex;
-		prev->Next = link;
-		prev = link;
-		linkMap.Add(link);
+		cups[prev] = linkIndex;
+		prev = linkIndex++;
 	}
+
+	cups[prev] = current;
 
 	for_range(numLoops)
 	{
-		Link* temp = current->Next;
-		current->Next = temp->Next->Next->Next;
+		uint temp = cups[current];
+		uint temp2 = cups[temp];
+		uint temp3 = cups[temp2];
+		uint nextCurrent = cups[temp3];
+		cups[current] = nextCurrent;
 
-		uint usedValues[3] = { temp->Value, temp->Next->Value, temp->Next->Next->Value };
-
-		Link* next = nullptr;
+		uint next = 0;
 		for_range_v(c, 4)
 		{
-			int nextValue = (int)current->Value - (c + 1);
+			int nextValue = (int)current - (c + 1);
 			if (nextValue < 1)
 				nextValue += numCups;
 
-			if ((uint)nextValue == usedValues[0] || (uint)nextValue == usedValues[1] || (uint)nextValue == usedValues[2])
+			if ((uint)nextValue == temp || (uint)nextValue == temp2 || (uint)nextValue == temp3)
 				continue;
 
-			next = linkMap[nextValue];
+			next = nextValue;
 			break;
 		}
 
-		temp->Next->Next->Next = next->Next;
-		next->Next = temp;
-		current = current->Next;
+		current = nextCurrent;
+
+		cups[temp3] = cups[next];
+		cups[next] = temp;
 	}
 
-	Link* one = linkMap[1];
+	uint one = cups[1];
 
 	if (part1)
 	{
 		uint result = 0;
 		for_range(numCups - 1)
 		{
-			one = one->Next;
-			result = result * 10 + one->Value;
+			result = result * 10 + one;
+			one = cups[one];
 		}
 		return result;
 	}
 
-	return uint64(one->Next->Value) * one->Next->Next->Value;
+	return uint64(one) * cups[one];
 }
 
 DEFINE_TEST_G(Part2, Day23)
