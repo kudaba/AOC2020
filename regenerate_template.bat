@@ -1,9 +1,10 @@
 @echo off
 
-echo Cleaning up
-del AOC\AOC_Day*.*
+set index=%1
 
-FOR /L %%A IN (1,1,25) DO (
+if "%index%"=="" set index=1
+
+FOR /L %%A IN (%index%,1,25) DO (
   call :GenDay %%A
 )
 
@@ -12,6 +13,11 @@ EXIT /B 0
 :GenDay
 
 echo Generating Day %1
+
+del AOC\AOC_Day%1Part1.txt
+del AOC\AOC_Day%1Part2.txt
+del AOC\AOC_Day%1Test.txt
+del AOC\AOC_Day%1.cpp
 
 type nul >> AOC\AOC_Day%1Part1.txt
 type nul >> AOC\AOC_Day%1Part2.txt
