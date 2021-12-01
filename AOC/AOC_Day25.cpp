@@ -1,30 +1,20 @@
 #include "AOC_Precompiled.h"
-#include "AOC_Day25.h"
 
-static uint64 locDay25Part1(char const* aFile)
+static uint locPart1(char const* aFile)
 {
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	GC_StrSlice line;
-	GC_StrLine(text, line);
-	uint64 key1 = GC_Atoi(line);
-	GC_StrLine(text, line);
-	uint64 key2 = GC_Atoi(line);
+	uint result = 0;
 
-	uint64 value = 1;
-	uint64 const subject = 7;
-	uint64 const divisor = 20201227;
-	uint loops = 0;
-	while (value != key1)
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
 	{
-		value = (value * subject) % divisor;
-		++loops;
 	}
 
-	uint64 result = 1;
-	for_range(loops)
+	// By Block parsing (block of lines separate by two new lines)
+	GC_String text;
+	GC_File::ReadAllText(aFile, text);
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
 	{
-		result = (result * key2) % divisor;
+
 	}
 
 	return result;
@@ -32,7 +22,11 @@ static uint64 locDay25Part1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day25)
 {
-	TEST_EQ(locDay25Part1("AOC_Day25Test.txt"), 14897079);
-	TEST_EQ(locDay25Part1("AOC_Day25Part1.txt"), 16457981);
+	TEST_EQ(locPart1("AOC_Day25Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day25Part1.txt"), 0);
 }
 
+DEFINE_TEST_G(Part2, Day25)
+{
+	TEST_EQ(locPart1("AOC_Day25Part2.txt"), 0);
+}

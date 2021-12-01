@@ -1,61 +1,32 @@
 #include "AOC_Precompiled.h"
-#include "AOC_Day8.h"
-#include "AOC_Program.h"
 
-static uint locDay8Part1(char const* aFile)
+static uint locPart1(char const* aFile)
 {
-	Program prog;
-	prog.Load(aFile);
+	uint result = 0;
 
-	CPU state;
-	while (prog[state.Exec].exec != 1 && prog.Step(state));
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
+	{
+	}
 
-	return state.Accum;
+	// By Block parsing (block of lines separate by two new lines)
+	GC_String text;
+	GC_File::ReadAllText(aFile, text);
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
+	{
+
+	}
+
+	return result;
 }
 
 DEFINE_TEST_G(Part1, Day8)
 {
-	TEST_EQ(locDay8Part1("AOC_Day8Test.txt"), 5);
-	TEST_EQ(locDay8Part1("AOC_Day8Part1.txt"), 1384);
-}
-
-static uint locDay8Part2(char const* aFile)
-{
-	Program prog;
-	prog.Load(aFile);
-
-	uint swap = prog.Count();
-	while (1)
-	{
-		CPU state;
-		while (prog[state.Exec].exec != 1 && prog.Step(state));
-
-		if (state.Exec >= prog.Count())
-			return state.Accum;
-
-		prog.ResetCounters();
-
-		if (swap < prog.Count())
-		{
-			if (prog[swap].op == Op::jmp)
-				prog[swap].op = Op::nop;
-			else
-				prog[swap].op = Op::jmp;
-		}
-
-		while (prog[--swap].op == Op::acc);
-
-		if (prog[swap].op == Op::jmp)
-			prog[swap].op = Op::nop;
-		else
-			prog[swap].op = Op::jmp;
-	}
-
-	return 0;
+	TEST_EQ(locPart1("AOC_Day8Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day8Part1.txt"), 0);
 }
 
 DEFINE_TEST_G(Part2, Day8)
 {
-	TEST_EQ(locDay8Part2("AOC_Day8Test.txt"), 8);
-	TEST_EQ(locDay8Part2("AOC_Day8Part1.txt"), 761);
+	TEST_EQ(locPart1("AOC_Day8Part2.txt"), 0);
 }

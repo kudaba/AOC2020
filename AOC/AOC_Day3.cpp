@@ -1,44 +1,32 @@
 #include "AOC_Precompiled.h"
-#include "AOC_Day3.h"
 
-template <uint Size>
-uint countTrees(char const* (&lines)[Size], uint step, uint stepy = 1)
+static uint locPart1(char const* aFile)
 {
-	uint trees = 0;
-	uint len = GC_Strlen(lines[0]);
-	uint offset = 0;
-	for (uint i = 0; i < Size; i += stepy)
+	uint result = 0;
+
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
 	{
-		if (lines[i][offset] == '#') ++trees;
-		offset = (offset + step) % len;
 	}
-	return trees;
+
+	// By Block parsing (block of lines separate by two new lines)
+	GC_String text;
+	GC_File::ReadAllText(aFile, text);
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
+	{
+
+	}
+
+	return result;
 }
 
 DEFINE_TEST_G(Part1, Day3)
 {
-	TEST_EQ(countTrees(testInput, 3), 7);
-	TEST_EQ(countTrees(part1Input, 3), 203);
-
-	uint trees = 0, offset = 0;
-	for (auto line : GC_File::ReadAllLines("AOC_Day3Part1.txt"))
-		trees += line[offset%line.Count()] == '#', offset += 3;
-	TEST_EQ(trees, 203);
-}
-
-template <uint Size>
-uint productTrees(char const* (&lines)[Size])
-{
-	return
-		countTrees(lines, 1, 1) *
-		countTrees(lines, 3, 1) *
-		countTrees(lines, 5, 1) *
-		countTrees(lines, 7, 1) *
-		countTrees(lines, 1, 2);
+	TEST_EQ(locPart1("AOC_Day3Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day3Part1.txt"), 0);
 }
 
 DEFINE_TEST_G(Part2, Day3)
 {
-	TEST_EQ(productTrees(testInput), 336);
-	TEST_EQ(productTrees(part1Input), 3316272960);
+	TEST_EQ(locPart1("AOC_Day3Part2.txt"), 0);
 }

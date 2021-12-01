@@ -1,154 +1,32 @@
 #include "AOC_Precompiled.h"
-#include "AOC_Day23.h"
 
-static uint locDay23Part1(char const* aFile, uint moves)
+static uint locPart1(char const* aFile)
 {
+	uint result = 0;
+
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
+	{
+	}
+
+	// By Block parsing (block of lines separate by two new lines)
 	GC_String text;
 	GC_File::ReadAllText(aFile, text);
-	GC_DynamicArray<uint> cups;
-	for (char c : text)
-	{
-		if (c == '\n')
-			break;
-		cups.Add() = c - '0';
-	}
-
-	uint len = cups.Count();
-	uint current = cups.First();
-
-	uint temp[3];
-
-	for_range(moves)
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
 	{
 
-		{
-			int index = cups.Find(current) + 1;
-			for_range_v(t, 3)
-			{
-				if (index == (int)cups.Count())
-					index = 0;
-				temp[t] = cups[index];
-				cups.RemoveAt(index);
-			}
-		}
-
-		int index = -1;
-		{
-			for_range_v(f, len)
-			{
-				index = cups.Find((uint)GC_WrapClamp<int>(current - (f+1), 0, len)); // <----------------- ERROR WRAP CLAMP ALWAY RETURNS MAX VALUE
-				if (index != -1)
-					break;
-			}
-		}
-
-		for_range_v(t, 3)
-			cups.Insert(index + t + 1, temp[t]);
-
-		current = cups[(cups.Find(current) + 1) % len];
 	}
-
-	uint result = 0;
-	int index = cups.Find(1u);
-	for_range(len - 1)
-		result = result * 10 + cups[(index + i + 1) % len];
 
 	return result;
 }
 
 DEFINE_TEST_G(Part1, Day23)
 {
-	TEST_EQ(locDay23Part1("AOC_Day23Test.txt", 10), 92658374);
-	TEST_EQ(locDay23Part1("AOC_Day23Test.txt", 100), 97548623); // 67384529);
-	TEST_EQ(locDay23Part1("AOC_Day23Part1.txt", 100), 95648732);
-}
-
-static uint64 locDay23Part2(char const* aFile, uint numCups, uint numLoops, bool part1)
-{
-	GC_DynamicArray<uint> cups;
-	cups.Resize(numCups + 1);
-
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-
-	uint linkIndex = 1;
-	uint current = 0;
-	uint prev = numCups;
-
-	for (char c : text)
-	{
-		if (c == '\n')
-			break;
-
-		uint cup = c - '0';
-
-		if (!current)
-			current = cup;
-
-		cups[prev] = cup;
-		prev = cup;
-
-		++linkIndex;
-	}
-
-	while (linkIndex <= numCups)
-	{
-		cups[prev] = linkIndex;
-		prev = linkIndex++;
-	}
-
-	cups[prev] = current;
-
-	for_range(numLoops)
-	{
-		uint temp = cups[current];
-		uint temp2 = cups[temp];
-		uint temp3 = cups[temp2];
-		uint nextCurrent = cups[temp3];
-		cups[current] = nextCurrent;
-
-		uint next = 0;
-		for_range_v(c, 4)
-		{
-			int nextValue = (int)current - (c + 1);
-			if (nextValue < 1)
-				nextValue += numCups;
-
-			if ((uint)nextValue == temp || (uint)nextValue == temp2 || (uint)nextValue == temp3)
-				continue;
-
-			next = nextValue;
-			break;
-		}
-
-		current = nextCurrent;
-
-		cups[temp3] = cups[next];
-		cups[next] = temp;
-	}
-
-	uint one = cups[1];
-
-	if (part1)
-	{
-		uint result = 0;
-		for_range(numCups - 1)
-		{
-			result = result * 10 + one;
-			one = cups[one];
-		}
-		return result;
-	}
-
-	return uint64(one) * cups[one];
+	TEST_EQ(locPart1("AOC_Day23Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day23Part1.txt"), 0);
 }
 
 DEFINE_TEST_G(Part2, Day23)
 {
-	TEST_EQ(locDay23Part2("AOC_Day23Test.txt", 9, 10, true), 92658374);
-	TEST_EQ(locDay23Part2("AOC_Day23Test.txt", 9, 100, true), 67384529);
-	TEST_EQ(locDay23Part2("AOC_Day23Part1.txt", 9, 100, true), 95648732);
-
-	TEST_EQ(locDay23Part2("AOC_Day23Test.txt", 1000000, 10000000, false), 149245887792);
-	TEST_EQ(locDay23Part2("AOC_Day23Part1.txt", 1000000, 10000000, false), 192515314252);
+	TEST_EQ(locPart1("AOC_Day23Part2.txt"), 0);
 }
