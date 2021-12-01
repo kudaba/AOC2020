@@ -4,6 +4,17 @@ static uint locPart1(char const* aFile)
 {
 	uint result = 0;
 
+	// By line with parse function
+	auto items = GC_File::Parse<int>(aFile, [](auto aLine, auto& anItem)
+		{
+			anItem = GC_Atoi(aLine);
+			return true;
+		});
+	for (auto item : items)
+	{
+		(void)item;
+	}
+
 	// By line parsing
 	for (auto line : GC_File::ReadAllLines(aFile))
 	{
