@@ -9,7 +9,7 @@
 namespace GC_File
 {
 	template <typename T>
-	GC_DynamicArray<T> Parse(char const* aFile, GC_Func<bool (GC_StrSlice, T&)> aReadLine)
+	GC_DynamicArray<T> Parse(char const* aFile, GC_Function<bool (GC_StrSlice, T&)> aReadLine)
 	{
 		auto lines = GC_File::ReadAllLines(aFile);
 		GC_DynamicArray<T> data;
@@ -18,6 +18,19 @@ namespace GC_File
 		for (auto line : lines)
 			if (!aReadLine(line, data.Add()))
 				data.PopBack();
+
+		return data;
+	}
+
+	template <typename T>
+	GC_DynamicArray<T> Parse(char const* aFile, GC_Function<T (GC_StrSlice)> aReadLine)
+	{
+		auto lines = GC_File::ReadAllLines(aFile);
+		GC_DynamicArray<T> data;
+		data.Reserve(lines.Count());
+
+		for (auto line : lines)
+			data.Add(aReadLine(line));
 
 		return data;
 	}
