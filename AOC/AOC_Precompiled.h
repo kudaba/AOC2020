@@ -35,3 +35,45 @@ namespace GC_File
 		return data;
 	}
 }
+
+inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(char const* aString, char const* aSeparator)
+{
+	GC_DynamicArray<GC_StrSlice> parts;
+
+	GC_StrSlice part;
+	while (GC_Strtok(aString, aSeparator, part))
+		parts.Add(part);
+
+	return parts;
+}
+
+inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(GC_StrSlice aString, char const* aSeparator)
+{
+	GC_DynamicArray<GC_StrSlice> parts;
+
+	GC_StrSlice part;
+	while (GC_Strtok(aString, aSeparator, part))
+		parts.Add(part);
+
+	return parts;
+}
+
+
+//-------------------------------------------------------------------------------------------------
+template<typename Type> inline
+constexpr GC_Vector2<Type> operator*(Type aScalar, const GC_Vector2<Type>& anOther)
+{
+	return GC_Vector2(Type(anOther.x * aScalar), Type(anOther.y * aScalar));
+}
+//-------------------------------------------------------------------------------------------------
+template<typename Type>
+constexpr GC_Vector3<Type> operator*(Type aScalar, const GC_Vector3<Type>& anOther)
+{
+	return GC_Vector3(Type(anOther.x * aScalar), Type(anOther.y * aScalar), Type(anOther.z * aScalar));
+}
+//-------------------------------------------------------------------------------------------------
+template<typename Type> inline
+constexpr GC_Vector4<Type> operator*(Type aScalar, const GC_Vector4<Type>& anOther)
+{
+	return GC_Vector4(Type(anOther.x * aScalar), Type(anOther.y * aScalar), Type(anOther.z * aScalar), Type(anOther.w * aScalar));
+}

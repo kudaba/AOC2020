@@ -3,22 +3,13 @@
 static auto locParseData(char const* aFile)
 {
 	// By line with parse function
-	return GC_File::Parse<GC_Vector2i>(aFile, [](auto aLine, auto& anItem)
+	return GC_File::Parse<GC_Vector2i>(aFile, [](auto aLine)
 		{
-			GC_StrSlice part;
-			GC_Strtok(aLine, " ", part);
-			if (GC_Strneq(part.begin(), "forward", part.Count()))
-				anItem = { 1, 0 };
-			else if (GC_Strneq(part.begin(), "down", part.Count()))
-				anItem = { 0, 1 };
-			else if (GC_Strneq(part.begin(), "up", part.Count()))
-				anItem = { 0, -1 };
-			else
-				anItem = { -1, 0 };
-
-			GC_Strtok(aLine, " ", part);
-			anItem *= GC_Atoi(part);
-			return true;
+			auto parts = GC_StrSplit(aLine, " ");
+			return GC_Atoi(parts[1]) *
+				// Totally stole this from someone elses solutionand cleaned mine up
+				(parts[0][0] == 'f' ? GC_Vector2i { 1, 0 } :
+				parts[0][0] == 'd' ? GC_Vector2i { 0, 1 } : GC_Vector2i { 0, -1 });
 		});
 }
 
