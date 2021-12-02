@@ -1,16 +1,19 @@
 #include "AOC_Precompiled.h"
 
+static auto locParseData(char const* aFile)
+{
+	// By line with parse function
+	return GC_File::Parse<int>(aFile, [](auto aLine)
+		{
+			return GC_Atoi(aLine);
+		});
+}
+
 static uint locPart1(char const* aFile)
 {
 	uint result = 0;
 
-	// By line with parse function
-	auto items = GC_File::Parse<int>(aFile, [](auto aLine, auto& anItem)
-		{
-			anItem = GC_Atoi(aLine);
-			return true;
-		});
-	for (auto item : items)
+	for (auto item : locParseData(aFile))
 	{
 		(void)item;
 	}
@@ -37,7 +40,20 @@ DEFINE_TEST_G(Part1, Day6)
 	TEST_EQ(locPart1("AOC_Day6Part1.txt"), 0);
 }
 
+static uint locPart2(char const* aFile)
+{
+	uint result = 0;
+
+	for (auto item : locParseData(aFile))
+	{
+		(void)item;
+	}
+
+	return result;
+}
+
 DEFINE_TEST_G(Part2, Day6)
 {
-	TEST_EQ(locPart1("AOC_Day6Part2.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day6Test.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day6Part1.txt"), 0);
 }
