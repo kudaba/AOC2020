@@ -36,23 +36,23 @@ namespace GC_File
 	}
 }
 
-inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(char const* aString, char const* aSeparator)
+inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(char const* aString, char const* aSeparator, bool anIncludeEmpty = false)
 {
 	GC_DynamicArray<GC_StrSlice> parts;
 
 	GC_StrSlice part;
-	while (GC_Strtok(aString, aSeparator, part))
+	while (GC_Strtok(aString, aSeparator, part, anIncludeEmpty))
 		parts.Add(part);
 
 	return parts;
 }
 
-inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(GC_StrSlice aString, char const* aSeparator)
+inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(GC_StrSlice aString, char const* aSeparator, bool anIncludeEmpty = false)
 {
 	GC_DynamicArray<GC_StrSlice> parts;
 
 	GC_StrSlice part;
-	while (GC_Strtok(aString, aSeparator, part))
+	while (GC_Strtok(aString, aSeparator, part, anIncludeEmpty))
 		parts.Add(part);
 
 	return parts;

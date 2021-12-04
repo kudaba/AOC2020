@@ -234,9 +234,6 @@
     <ClInclude Include="AOC_Day3Test.txt">
       <Filter>Week1\Day3</Filter>
     </ClInclude>
-    <ClInclude Include="AOC_Day4Part2.txt">
-      <Filter>Week1\Day4</Filter>
-    </ClInclude>
     <ClInclude Include="AOC_Day4Test.txt">
       <Filter>Week1\Day4</Filter>
     </ClInclude>
