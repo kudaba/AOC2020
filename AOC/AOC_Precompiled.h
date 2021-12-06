@@ -34,6 +34,25 @@ namespace GC_File
 
 		return data;
 	}
+
+	inline GC_String ReadAllText(char const* aFile)
+	{
+		GC_String text;
+		GC_File::ReadAllText(aFile, text);
+		return text;
+	}
+}
+
+namespace GC_Algorithm
+{
+	template <typename T>
+	T Sum(GC_ArrayRange<T> anInput)
+	{
+		T result = {};
+		for (T const& i : anInput)
+			result += i;
+		return result;
+	}
 }
 
 inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(char const* aString, char const* aSeparator, bool anIncludeEmpty = false)

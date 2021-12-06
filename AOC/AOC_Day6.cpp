@@ -1,59 +1,27 @@
 #include "AOC_Precompiled.h"
 
-static auto locParseData(char const* aFile)
+static uint64 locPart1(char const* aFile, uint days)
 {
-	// By line with parse function
-	return GC_File::Parse<int>(aFile, [](auto aLine)
-		{
-			return GC_Atoi(aLine);
-		});
-}
+	GC_String text = GC_File::ReadAllText(aFile);
 
-static uint locPart1(char const* aFile)
-{
-	uint result = 0;
+	uint64 numbers[9] = { 0 };
+	for (auto n : GC_StrSplit(text, ","))
+		numbers[GC_Atoi(n)]++;
 
-	for (auto item : locParseData(aFile))
-	{
-		(void)item;
-	}
+	for (uint i = 0; i < days; ++i)
+		numbers[(i + 7) % 9] += numbers[i % 9];
 
-	// By line parsing
-	for (auto line : GC_File::ReadAllLines(aFile))
-	{
-	}
-
-	// By Block parsing (block of lines separate by two new lines)
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
-	{
-
-	}
-
-	return result;
+	return GC_Algorithm::Sum(GC_ArrayRange(numbers));
 }
 
 DEFINE_TEST_G(Part1, Day6)
 {
-	TEST_EQ(locPart1("AOC_Day6Test.txt"), 0);
-	TEST_EQ(locPart1("AOC_Day6Part1.txt"), 0);
-}
-
-static uint locPart2(char const* aFile)
-{
-	uint result = 0;
-
-	for (auto item : locParseData(aFile))
-	{
-		(void)item;
-	}
-
-	return result;
+	TEST_EQ(locPart1("AOC_Day6Test.txt", 80), 5934);
+	TEST_EQ(locPart1("AOC_Day6Part1.txt", 80), 395627);
 }
 
 DEFINE_TEST_G(Part2, Day6)
 {
-	TEST_EQ(locPart2("AOC_Day6Test.txt"), 0);
-	TEST_EQ(locPart2("AOC_Day6Part1.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day6Test.txt", 256), 26984457539);
+	TEST_EQ(locPart1("AOC_Day6Part1.txt", 256), 1767323539209);
 }
