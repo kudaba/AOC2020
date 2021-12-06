@@ -20,7 +20,7 @@ del AOC\AOC_Day%1Test.txt
 del AOC\AOC_Day%1.cpp
 
 type nul >> AOC\AOC_Day%1Part1.txt
-type nul >> AOC\AOC_Day%1Part2.txt
+rem type nul >> AOC\AOC_Day%1Part2.txt
 type nul >> AOC\AOC_Day%1Test.txt
 
 powershell -Command "(gc AOC\AOC_Template.cpp) -replace 'DayX', 'Day%1' | Out-File -encoding ASCII AOC\AOC_Day%1.cpp"

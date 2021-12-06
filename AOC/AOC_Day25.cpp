@@ -9,9 +9,9 @@ static auto locParseData(char const* aFile)
 		});
 }
 
-static uint locPart1(char const* aFile)
+static auto locPart1(char const* aFile)
 {
-	uint result = 0;
+	uint64 result = 0;
 
 	for (auto item : locParseData(aFile))
 	{
@@ -40,15 +40,9 @@ DEFINE_TEST_G(Part1, Day25)
 	TEST_EQ(locPart1("AOC_Day25Part1.txt"), 0);
 }
 
-static uint locPart2(char const* aFile)
+static auto locPart2(char const*)
 {
-	uint result = 0;
-
-	for (auto item : locParseData(aFile))
-	{
-		(void)item;
-	}
-
+	uint64 result = 0;
 	return result;
 }
 
