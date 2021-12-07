@@ -1,53 +1,50 @@
 #include "AOC_Precompiled.h"
 
-static auto locParseData(char const* aFile)
+static auto locPart1(char const* aFile, bool aSecond)
 {
-	// By line with parse function
-	return GC_File::Parse<int>(aFile, [](auto aLine)
-		{
-			return GC_Atoi(aLine);
-		});
-}
+	GC_String text = GC_File::ReadAllText(aFile);
 
-static auto locPart1(char const* aFile)
-{
-	uint64 result = 0;
-
-	for (auto item : locParseData(aFile))
+	GC_DynamicArray<uint64> numbers;
+	for (auto n : GC_StrSplit(text, ","))
 	{
-		(void)item;
+		uint i = GC_Atoi(n);
+		numbers.Resize(GC_Max(i + 1, numbers.Count()), 0);
+		numbers[i]++;
 	}
 
-	// By line parsing
-	for (auto line : GC_File::ReadAllLines(aFile))
+	uint64 minCost = UINT64_MAX;
+
+	GC_DynamicArray<uint64> costs;
+	costs.Resize(numbers.Count());
+
+	uint totalCosts = 0;
+	for (uint i = 0; i < costs.Count(); ++i)
 	{
+		totalCosts += i;
+		costs[i] = aSecond ? totalCosts : i;
 	}
 
-	// By Block parsing (block of lines separate by two new lines)
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
+	for (uint i = 0; i < numbers.Count(); ++i)
 	{
+		uint64 cost = 0;
+		for (uint j = 0; j < numbers.Count(); ++j)
+			cost += costs[GC_Abs((int)j - (int)i)] * numbers[j];
 
+		if (cost < minCost)
+			minCost = cost;
 	}
 
-	return result;
+	return minCost;
 }
 
 DEFINE_TEST_G(Part1, Day7)
 {
-	TEST_EQ(locPart1("AOC_Day7Test.txt"), 0);
-	TEST_EQ(locPart1("AOC_Day7Part1.txt"), 0);
-}
-
-static auto locPart2(char const*)
-{
-	uint64 result = 0;
-	return result;
+	TEST_EQ(locPart1("AOC_Day7Test.txt", false), 37);
+	TEST_EQ(locPart1("AOC_Day7Part1.txt", false), 335271);
 }
 
 DEFINE_TEST_G(Part2, Day7)
 {
-	TEST_EQ(locPart2("AOC_Day7Test.txt"), 0);
-	TEST_EQ(locPart2("AOC_Day7Part1.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day7Test.txt", true), 168);
+	TEST_EQ(locPart1("AOC_Day7Part1.txt", true), 95851339);
 }
