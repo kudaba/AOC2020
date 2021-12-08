@@ -1,34 +1,26 @@
 #include "AOC_Precompiled.h"
 
-static auto locParseData(char const* aFile)
-{
-	// By line with parse function
-	return GC_File::Parse<int>(aFile, [](auto aLine)
-		{
-			return GC_Atoi(aLine);
-		});
-}
-
 static auto locPart1(char const* aFile)
 {
 	uint64 result = 0;
 
-	for (auto item : locParseData(aFile))
-	{
-		(void)item;
-	}
-
-	// By line parsing
 	for (auto line : GC_File::ReadAllLines(aFile))
 	{
-	}
+		GC_StrSlice part;
+		GC_Strtok(line, " | ", part);
 
-	// By Block parsing (block of lines separate by two new lines)
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
-	{
+		char seg[8] = { 0 };
 
+		GC_StrSlice in;
+		while (GC_Strtok(part, " ", in))
+			seg[in.Count()]++;
+
+		GC_Strtok(line, " | ", part);
+
+		GC_StrSlice out;
+		while (GC_Strtok(part, " ", out))
+			if (seg[out.Count()] == 1)
+				++result;
 	}
 
 	return result;
@@ -36,18 +28,123 @@ static auto locPart1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day8)
 {
-	TEST_EQ(locPart1("AOC_Day8Test.txt"), 0);
-	TEST_EQ(locPart1("AOC_Day8Part1.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day8Test.txt"), 26);
+	TEST_EQ(locPart1("AOC_Day8Part1.txt"), 318);
 }
 
-static auto locPart2(char const*)
+char ToMask(GC_StrSlice num)
+{
+	char mask = 0;
+	for (char c : num)
+		mask |= 1 << (c - 'a');
+	return mask;
+}
+
+static auto locPart2(char const* aFile)
 {
 	uint64 result = 0;
+
+	for (auto line : GC_File::ReadAllLines(aFile))
+	{
+		GC_StrSlice part;
+		GC_Strtok(line, " | ", part);
+
+		char numbers[10] = {};
+		char _235[3] = {};
+		char _069[3] = {};
+		char* _235w = _235;
+		char* _069w = _069;
+
+		GC_StrSlice in;
+		while (GC_Strtok(part, " ", in))
+		{
+			switch (in.Count())
+			{
+			case 2: numbers[1] = ToMask(in); break;
+			case 3: numbers[7] = ToMask(in); break;
+			case 4: numbers[4] = ToMask(in); break;
+			case 5: *(_235w++) = ToMask(in); break;
+			case 6: *(_069w++) = ToMask(in); break;
+			case 7: numbers[8] = ToMask(in); break;
+			}
+		}
+
+		// 3
+		for (char& c : _235)
+			if ((c & numbers[1]) == numbers[1])
+			{
+				numbers[3] = c;
+				c = 0;
+				break;
+			}
+
+		// 9
+		for (char& c : _069)
+			if ((c & numbers[4]) == numbers[4])
+			{
+				numbers[9] = c;
+				c = 0;
+				break;
+			}
+
+		// 5
+		for (char& c : _235)
+			if ((c|numbers[1]) == numbers[9])
+			{
+				numbers[5] = c;
+				c = 0;
+				break;
+			}
+
+		//  2
+		for (char& c : _235)
+			if (c)
+			{
+				numbers[2] = c;
+				break;
+			}	
+
+		// 6
+		for (char& c : _069)
+			if ((~(numbers[1] & numbers[2]) & 0x7f) == c)
+			{
+				numbers[6] = c;
+				c = 0;
+				break;
+			}
+
+		//  0
+		for (char& c : _069)
+			if (c)
+			{
+				numbers[0] = c;
+				break;
+			}
+
+		GC_Strtok(line, " | ", part);
+
+		uint value = 0;
+
+		GC_StrSlice out;
+		while (GC_Strtok(part, " ", out))
+		{
+			char t = ToMask(out);
+			for_index(char c : numbers)
+				if (c == t)
+				{
+					value = value * 10 + i;
+					break;
+				}
+		}
+
+		result += value;
+	}
+
 	return result;
 }
 
 DEFINE_TEST_G(Part2, Day8)
 {
-	TEST_EQ(locPart2("AOC_Day8Test.txt"), 0);
-	TEST_EQ(locPart2("AOC_Day8Part1.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day8Test.txt"), 61229);
+	TEST_EQ(locPart2("AOC_Day8Part1.txt"), 996280);
 }
