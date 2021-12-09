@@ -4,6 +4,8 @@
 #include "GC_Mutex.h"
 #include "GC_UnitTest.h"
 #include "GC_DynamicArray2D.h"
+#include "GC_CardinalDirections.h"
+#include "GC_BitVector.h"
 
 // Todo; add to graphium
 namespace GC_File
@@ -52,6 +54,32 @@ namespace GC_Algorithm
 		for (T const& i : anInput)
 			result += i;
 		return result;
+	}
+
+	template <typename Type, typename Predicate>
+	void FloodFillRecursive(GC_ArrayRange2D<Type> const& aGrid, GC_BitVector& aVisited, GC_Vector2u aPosition, Predicate const& aPredicate)
+	{
+		uint const index = aPosition.y * aGrid.Width() + aPosition.x;
+		if (aVisited.GetValue(index))
+			return;
+
+		aVisited.SetValue(index, true);
+
+		if (aPredicate(aGrid(aPosition)))
+		{
+			if (aPosition.x > 0) FloodFillRecursive(aGrid, aVisited, aPosition - GC_Vector2i(1, 0), aPredicate);
+			if (aPosition.y > 0) FloodFillRecursive(aGrid, aVisited, aPosition - GC_Vector2i(0, 1), aPredicate);
+			if (aPosition.x < aGrid.Width() - 1) FloodFillRecursive(aGrid, aVisited, aPosition + GC_Vector2i(1, 0), aPredicate);
+			if (aPosition.y < aGrid.Height() - 1) FloodFillRecursive(aGrid, aVisited, aPosition + GC_Vector2i(0, 1), aPredicate);
+		}
+	}
+
+	template <typename Type, typename Predicate>
+	void FloodFill(GC_ArrayRange2D<Type> const& aGrid, GC_Vector2u aStart, Predicate const& aPredicate)
+	{
+		GC_BitVector visited;
+		visited.Resize(aGrid.Count());
+		FloodFillRecursive(aGrid, visited, aStart, aPredicate);
 	}
 }
 
