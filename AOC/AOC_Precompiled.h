@@ -7,6 +7,15 @@
 #include "GC_CardinalDirections.h"
 #include "GC_BitVector.h"
 
+constexpr void for_range2d_next(uint& x, uint& y, uint maxx)
+{
+	++x;
+	bool const xmax = x == maxx;
+	y += xmax;
+	x = x * !xmax;
+}
+#define for_range2d(maxx, maxy) for (uint x = 0, y = 0; x < maxx && y < maxy; for_range2d_next(x, y, maxx))
+
 // Todo; add to graphium
 namespace GC_File
 {
@@ -34,6 +43,36 @@ namespace GC_File
 		for (auto line : lines)
 			data.Add(aReadLine(line));
 
+		return data;
+	}
+
+	template <typename T>
+	GC_DynamicArray2D<T> Parse2d(char const* aFile, GC_Function<T (char c)> aRead)
+	{
+		auto lines = GC_File::ReadAllLines(aFile);
+		GC_DynamicArray2D<T> data;
+		data.SetSize({ lines[0].Count(), lines.Count() });
+
+		for_index_v(y, GC_StrSlice const& l : lines)
+			for_index_v(x, char c : l)
+			data(x, y) = aRead(c);
+		return data;
+	}
+
+	template <typename T>
+	GC_DynamicArray2D<T> Parse2d(char const* aFile, char const* aSeparator, GC_Function<T (GC_StrSlice)> aRead)
+	{
+		auto lines = GC_File::ReadAllLines(aFile);
+		GC_DynamicArray2D<T> data;
+		data.SetSize({ lines[0].Count(), lines.Count() });
+
+		for_index_v(y, GC_StrSlice const& l : lines)
+		{
+			GC_StrSlice p;
+			uint x;
+			while (GC_Strtok(l, aSeparator, p))
+				data(x++, y) = aRead(p);
+		}
 		return data;
 	}
 
