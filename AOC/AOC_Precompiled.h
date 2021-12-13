@@ -141,28 +141,24 @@ namespace GC_Algorithm
 	}
 }
 
-inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(char const* aString, char const* aSeparator, bool anIncludeEmpty = false)
+template <uint Size>
+struct GC_StrSplitType
 {
-	GC_DynamicArray<GC_StrSlice> parts;
+	typedef GC_HybridArray<GC_StrSlice, Size> Parts;
+};
+template <>
+struct GC_StrSplitType<0>
+{
+	typedef GC_DynamicArray<GC_StrSlice> Parts;
+};
 
-	GC_StrSlice part;
-	while (GC_Strtok(aString, aSeparator, part, anIncludeEmpty))
-		parts.Add(part);
-
+template <uint Size = 0, typename CharIn = GC_StrSlice, typename CharSep = char const*>
+inline auto GC_StrSplit(CharIn const& aString, CharSep const& aSeparator, bool anIncludeEmpty = false)
+{
+	typename GC_StrSplitType<Size>::Parts parts;
+	for (GC_StrSlice part; GC_Strtok(aString, aSeparator, part, anIncludeEmpty);) parts.Add(part);
 	return parts;
 }
-
-inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(GC_StrSlice aString, char const* aSeparator, bool anIncludeEmpty = false)
-{
-	GC_DynamicArray<GC_StrSlice> parts;
-
-	GC_StrSlice part;
-	while (GC_Strtok(aString, aSeparator, part, anIncludeEmpty))
-		parts.Add(part);
-
-	return parts;
-}
-
 
 //-------------------------------------------------------------------------------------------------
 template<typename Type> inline

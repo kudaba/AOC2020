@@ -6,19 +6,16 @@ static auto locPart1(char const* aFile)
 
 	for (auto line : GC_File::ReadAllLines(aFile))
 	{
-		GC_StrSlice part;
-		GC_Strtok(line, " | ", part);
+		auto const parts = GC_StrSplit<2>(line, " | ");
 
 		char seg[8] = { 0 };
 
 		GC_StrSlice in;
-		while (GC_Strtok(part, " ", in))
+		while (GC_Strtok(parts[0], " ", in))
 			seg[in.Count()]++;
 
-		GC_Strtok(line, " | ", part);
-
 		GC_StrSlice out;
-		while (GC_Strtok(part, " ", out))
+		while (GC_Strtok(parts[1], " ", out))
 			if (seg[out.Count()] == 1)
 				++result;
 	}
@@ -46,8 +43,7 @@ static auto locPart2(char const* aFile)
 
 	for (auto line : GC_File::ReadAllLines(aFile))
 	{
-		GC_StrSlice part;
-		GC_Strtok(line, " | ", part);
+		auto const parts = GC_StrSplit<2>(line, " | ");
 
 		char numbers[10] = {};
 		char _235[3] = {};
@@ -55,8 +51,7 @@ static auto locPart2(char const* aFile)
 		char* _235w = _235;
 		char* _069w = _069;
 
-		GC_StrSlice in;
-		while (GC_Strtok(part, " ", in))
+		for (GC_StrSlice in; GC_Strtok(parts[0], " ", in);)
 		{
 			switch (in.Count())
 			{
@@ -121,12 +116,9 @@ static auto locPart2(char const* aFile)
 				break;
 			}
 
-		GC_Strtok(line, " | ", part);
-
 		uint value = 0;
 
-		GC_StrSlice out;
-		while (GC_Strtok(part, " ", out))
+		for (GC_StrSlice out; GC_Strtok(parts[1], " ", out);)
 		{
 			char t = ToMask(out);
 			for_index(char c : numbers)

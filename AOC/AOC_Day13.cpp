@@ -6,32 +6,25 @@ static auto locPart1(char const* aFile, bool isPart1)
 	GC_DynamicArray2D<bool> data;
 
 	// By Block parsing (block of lines separate by two new lines)
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	GC_StrSlice chunk;
-	GC_Strtok(text, "\n\n", chunk);
+	GC_String const text = GC_File::ReadAllText(aFile);
+	auto const chunks = GC_StrSplit<2>(text, "\n\n");
+
+	for (GC_StrSlice p; GC_StrLine(chunks[0], p);)
 	{
-		for (GC_StrSlice p; GC_StrLine(chunk, p);)
-		{
-			GC_Vector2u pos;
+		GC_Vector2u pos;
 
-			for_index(GC_StrSlice n; GC_Strtok(p, ",", n);)
-				pos[i] = GC_Atoi(n);
+		for_index(GC_StrSlice n; GC_Strtok(p, ",", n);)
+			pos[i] = GC_Atoi(n);
 
-			GC_Algorithm::Resize(data, GC_Max(pos + GC_Vector2u(1), data.Size()), false);
-			data(pos) = true;
-		}
+		GC_Algorithm::Resize(data, GC_Max(pos + GC_Vector2u(1), data.Size()), false);
+		data(pos) = true;
 	}
 
-	GC_Strtok(text, "\n\n", chunk);
-	
-	for (GC_StrSlice ln; GC_StrLine(chunk, ln);)
+	for (GC_StrSlice ln; GC_StrLine(chunks[1], ln);)
 	{
-		GC_StrSlice n;
-		GC_Strtok(ln, "=", n);
-		bool isX = n.Last() == 'x';
-		GC_Strtok(ln, "=", n);
-		uint num = GC_Atoi(n);
+		auto const fold = GC_StrSplit<2>(ln, '=');
+		bool const isX = fold[0].Last() == 'x';
+		uint const num = GC_Atoi(fold[1]);
 
 		if (isX)
 		{

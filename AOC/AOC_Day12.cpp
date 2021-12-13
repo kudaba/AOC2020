@@ -13,14 +13,11 @@ static auto locParseData(char const* aFile)
 	// By line with parse function
 	return GC_File::Parse<GC_Pair<Node, Node>>(aFile, [](auto aLine)
 		{
-			GC_StrSlice part;
-			GC_Strtok(aLine, "-", part);
-			uint16 s = part.Count() == 2 ? *(uint16 const*)part.begin() : (part[0] == 's' ? 0 : 1);
-			bool sb = GC_IsUpper(part[0]);
-			GC_Strtok(aLine, "-", part);
-			uint16 e = part.Count() == 2 ? *(uint16 const*)part.begin() : (part[0] == 's' ? 0 : 1);
-			bool eb = GC_IsUpper(part[0]);
-
+			auto const parts = GC_StrSplit<2>(aLine, "-");
+			uint16 const s = parts[0].Count() == 2 ? *(uint16 const*)parts[0].begin() : (parts[0][0] == 's' ? 0 : 1);
+			bool const sb = GC_IsUpper(parts[0][0]);
+			uint16 const e = parts[1].Count() == 2 ? *(uint16 const*)parts[1].begin() : (parts[1][0] == 's' ? 0 : 1);
+			bool const eb = GC_IsUpper(parts[1][0]);
 			return GC_Pair<Node, Node>({ s,sb }, { e,eb });
 		});
 }

@@ -2,14 +2,8 @@
 
 GC_Vector2i readV(GC_StrSlice in)
 {
-	GC_Vector2i out;
-
-	GC_StrSlice part;
-	GC_Strtok(in, ",", part);
-	out.x = GC_Atoi(part);
-	GC_Strtok(in, ",", part);
-	out.y = GC_Atoi(part);
-	return out;
+	auto const parts = GC_StrSplit<2>(in, ",");
+	return { GC_Atoi(parts[0]), GC_Atoi(parts[1]) };
 }
 
 static GC_DynamicArray<GC_Pair<GC_Vector2i, GC_Vector2i>> locParseData(char const* aFile)
@@ -17,11 +11,8 @@ static GC_DynamicArray<GC_Pair<GC_Vector2i, GC_Vector2i>> locParseData(char cons
 	// By line with parse function
 	return GC_File::Parse<GC_Pair<GC_Vector2i, GC_Vector2i>>(aFile, [](auto aLine) 
 		{
-			GC_StrSlice part;
-			GC_Strtok(aLine, " -> ", part);
-			auto s = readV(part);
-			GC_Strtok(aLine, " -> ", part);
-			return GC_Pair<GC_Vector2i, GC_Vector2i> { s, readV(part) };
+			auto const parts = GC_StrSplit<2>(aLine, " -> ");
+			return GC_Pair<GC_Vector2i, GC_Vector2i> { readV(parts[0]), readV(parts[1]) };
 		});
 }
 
