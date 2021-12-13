@@ -120,6 +120,25 @@ namespace GC_Algorithm
 		visited.Resize(aGrid.Count());
 		FloodFillRecursive(aGrid, visited, aStart, aPredicate);
 	}
+
+	template <typename Type>
+	void Resize(GC_DynamicArray2D<Type>& anArray, GC_Vector2u aSize, Type const& aDefaultValue)
+	{
+		GC_Vector2u const ogSize = anArray.Size();
+		anArray.SetSize(aSize);
+
+		if (aSize.x > ogSize.x)
+		{
+			uint const count = aSize.x - ogSize.x;
+			for_range_v(y, GC_Min(ogSize.y, aSize.y))
+				GC_ArraySet(anArray.Row(y).Right(count).Buffer(), aDefaultValue, count);
+		}
+
+		if (aSize.y > ogSize.y)
+		{
+			GC_ArraySet(anArray.Row(ogSize.y).Buffer(), aDefaultValue, (aSize.y - ogSize.y) * aSize.x);
+		}
+	}
 }
 
 inline GC_DynamicArray<GC_StrSlice> GC_StrSplit(char const* aString, char const* aSeparator, bool anIncludeEmpty = false)
