@@ -87,11 +87,27 @@ namespace GC_File
 namespace GC_Algorithm
 {
 	template <typename T>
-	T Sum(GC_ArrayRange<T> anInput)
+	auto Sum(T const& anInput)
 	{
-		T result = {};
-		for (T const& i : anInput)
+		GC_TypeNoConstNoReference<decltype(anInput[0])> result = {};
+		for (auto const& i : anInput)
 			result += i;
+		return result;
+	}
+	template <typename T>
+	auto Min(T const& anInput)
+	{
+		auto result = anInput[0];
+		for (auto const& i : anInput)
+			result = GC_Min(result, i);
+		return result;
+	}
+	template <typename T>
+	auto Max(T const& anInput)
+	{
+		auto result = anInput[0];
+		for (auto const& i : anInput)
+			result = GC_Max(result, i);
 		return result;
 	}
 

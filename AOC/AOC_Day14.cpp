@@ -1,53 +1,67 @@
 #include "AOC_Precompiled.h"
 
-static auto locParseData(char const* aFile)
+static auto locPart1(char const* aFile, uint iterations)
 {
-	// By line with parse function
-	return GC_File::Parse<int>(aFile, [](auto aLine)
+	auto text = GC_File::ReadAllText(aFile);
+	auto parts = GC_StrSplit<2>(text, "\n\n");
+
+	struct Rule
+	{
+		char Replacement;
+		uint64 Count;
+	};
+
+	GC_HashMap<GC_String, Rule> rules;
+
+	for (GC_StrSlice ln; GC_StrLine(parts[1], ln);)
+	{
+		auto rparts = GC_StrSplit<2>(ln, " -> ");
+		rules.Add(rparts[0], { rparts[1][0], 0 });
+	}
+
+	for_range (parts[0].Count() - 1)
+		rules.GetOrAdd(GC_String(parts[0].Buffer() + i, 2)).Count++;
+
+	GC_HashMap<GC_String, Rule> rules2 = rules;
+
+	for_range_v(x, iterations)
+	{
+		for (auto & r : rules2)
+			r.myValue.Count = 0;
+
+		for (auto r : rules)
 		{
-			return GC_Atoi(aLine);
-		});
-}
+			char left[3] = { r.myKey[0], r.myValue.Replacement, 0 };
+			char right[3] = { r.myValue.Replacement, r.myKey[1], 0 };
+			rules2.GetOrAdd(left).Count += r.myValue.Count;
+			rules2.GetOrAdd(right).Count += r.myValue.Count;
+		}
 
-static auto locPart1(char const* aFile)
-{
-	uint64 result = 0;
-
-	for (auto item : locParseData(aFile))
-	{
-		(void)item;
+		rules.Swap(rules2);
 	}
 
-	// By line parsing
-	for (auto line : GC_File::ReadAllLines(aFile))
-	{
-	}
+	uint64 counts[26] = {};
 
-	// By Block parsing (block of lines separate by two new lines)
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
-	{
+	for (auto r : rules)
+		counts[r.myKey[1] - 'A'] += r.myValue.Count;
+	counts[parts[0][0] - 'A']++;
 
-	}
+	uint64 min = UINT64_MAX;
+	for (auto c : counts)
+		if (c)
+			min = GC_Min(min, c);
 
-	return result;
+	return GC_Algorithm::Max(counts) - min;
 }
 
 DEFINE_TEST_G(Part1, Day14)
 {
-	TEST_EQ(locPart1("AOC_Day14Test.txt"), 0);
-	TEST_EQ(locPart1("AOC_Day14Part1.txt"), 0);
-}
-
-static auto locPart2(char const*)
-{
-	uint64 result = 0;
-	return result;
+	TEST_EQ(locPart1("AOC_Day14Test.txt", 10), 1588);
+	TEST_EQ(locPart1("AOC_Day14Part1.txt", 10), 3697);
 }
 
 DEFINE_TEST_G(Part2, Day14)
 {
-	TEST_EQ(locPart2("AOC_Day14Test.txt"), 0);
-	TEST_EQ(locPart2("AOC_Day14Part1.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day14Test.txt", 40), 2188189693529);
+	TEST_EQ(locPart1("AOC_Day14Part1.txt", 40), 4371307836157);
 }
