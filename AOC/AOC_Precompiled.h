@@ -1,11 +1,27 @@
 #pragma once
 
+#define BASE_FIXTURE AOC_TestFixture
+
 #include "GC_Include.h"
 #include "GC_Mutex.h"
 #include "GC_UnitTest.h"
 #include "GC_DynamicArray2D.h"
 #include "GC_CardinalDirections.h"
 #include "GC_BitVector.h"
+#include "GC_StringPrinter.h"
+
+class AOC_TestFixture : public GC_TestFixture
+{
+protected:
+	void OnSetup() override { myTimer.Reset(); }
+	void OnTearDown() override
+	{
+		Printf(GC_Strfmt<256>("{}/{} Completed in {}.\n", TestGroup(), TestName(), GC_StringPrinter::TimeFromHighRes(myTimer.GetElapsed())));
+	}
+private:
+	GC_HighResTimer myTimer;
+};
+
 
 constexpr void for_range2d_next(uint& x, uint& y, uint maxx)
 {
