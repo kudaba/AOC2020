@@ -110,6 +110,16 @@ namespace GC_Algorithm
 			result += i;
 		return result;
 	}
+
+	template <typename T, typename P>
+	auto Sum(T const& anInput, P aPredicate)
+	{
+		GC_TypeNoConstNoReference<decltype(aPredicate(anInput[0]))> result = {};
+		for (auto const& i : anInput)
+			result += aPredicate(i);
+		return result;
+	}
+
 	template <typename T>
 	auto Min(T const& anInput)
 	{
