@@ -121,6 +121,15 @@ namespace GC_Algorithm
 	}
 
 	template <typename T>
+	auto Product(T const& anInput)
+	{
+		GC_TypeNoConstNoReference<decltype(anInput[0])> result = 1;
+		for (auto const& i : anInput)
+			result *= i;
+		return result;
+	}
+
+	template <typename T>
 	auto Min(T const& anInput)
 	{
 		auto result = anInput[0];
