@@ -102,6 +102,8 @@ namespace GC_File
 
 namespace GC_Algorithm
 {
+	constexpr uint64 SumOfRange(uint64 aValue) { return aValue * (aValue + 1) / 2; }
+
 	template <typename T>
 	auto Sum(T const& anInput)
 	{
