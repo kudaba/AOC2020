@@ -67,7 +67,7 @@ static auto locPart1(char const* aFile, bool isPart1)
 		output.Append("\n");
 	}
 
-	TestFixture::GetCurrentTest()->Printf(output.ToString());
+	printf(output.ToString());
 
 	return (u64)0;
 }

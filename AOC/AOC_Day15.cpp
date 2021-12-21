@@ -13,7 +13,6 @@ static uint locGetLowestCost(GC_DynamicArray2D<Tile>& data)
 	queue.Reserve(data.Size().Area());
 	queue.Add(0, GC_HybridArray<GC_Vector2u, 32>(1, { 0,0 }));
 
-	uint iterations = 0;
 	uint cost = 0;
 
 	while (queue.Count())
@@ -24,7 +23,6 @@ static uint locGetLowestCost(GC_DynamicArray2D<Tile>& data)
 			++cost;
 			costQueue = queue.Find(cost);
 		}
-		++iterations;
 
 		auto const candidate = costQueue->Last();
 		costQueue->PopBack();
@@ -37,10 +35,7 @@ static uint locGetLowestCost(GC_DynamicArray2D<Tile>& data)
 		tile.Visited = true;
 
 		if (end == candidate)
-		{
-			TestFixture::GetCurrentTest()->Printf("iters: %d\n", iterations);
 			return cost;
-		}
 
 		for (auto dir : GC_Cardinal::Range())
 		{

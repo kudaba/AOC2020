@@ -1,6 +1,8 @@
 #include "AOC_Precompiled.h"
 #include "GC_Initialize.h"
 
+uint64 AOC_TestFixture::theHighResTime;
+
 int main(int argc, char* argv[])
 {
 	// Initialize GC once to commit CWD
@@ -11,5 +13,10 @@ int main(int argc, char* argv[])
 	GC_Initialize(settings);
 	GC_Shutdown();
 
-	return GC_TestFixture::RunAll(argc, argv);
+	int ret = GC_TestFixture::RunAll(argc, argv);
+
+	auto output = GC_StringPrinter::TimeFromHighRes(AOC_TestFixture::theHighResTime);
+	printf("Tests Completed in %s.\n", output.ToString());
+
+	return ret;
 }

@@ -16,10 +16,14 @@ protected:
 	void OnSetup() override { myTimer.Reset(); }
 	void OnTearDown() override
 	{
-		Printf(GC_Strfmt<256>("{}/{} Completed in {}.\n", TestGroup(), TestName(), GC_StringPrinter::TimeFromHighRes(myTimer.GetElapsed())));
+		uint64 elapsed = myTimer.GetElapsed();
+		Printf(GC_Strfmt<256>("{}/{} Completed in {}.\n", TestGroup(), TestName(), GC_StringPrinter::TimeFromHighRes(elapsed)));
+		theHighResTime += elapsed;
 	}
 private:
 	GC_HighResTimer myTimer;
+public:
+	static uint64 theHighResTime;
 };
 
 
@@ -231,4 +235,12 @@ template<typename Type> inline
 constexpr GC_Vector4<Type> operator*(Type aScalar, const GC_Vector4<Type>& anOther)
 {
 	return GC_Vector4(Type(anOther.x * aScalar), Type(anOther.y * aScalar), Type(anOther.z * aScalar), Type(anOther.w * aScalar));
+}
+//-------------------------------------------------------------------------------------------------
+// Incorporate specializations for float/double vs for integers
+//-------------------------------------------------------------------------------------------------
+template<>
+constexpr GC_Vector2<u64> GC_Vector2<u64>::operator/(u64 aScalar) const
+{
+	return GC_Vector2(x / aScalar, y / aScalar);
 }
