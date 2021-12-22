@@ -81,6 +81,9 @@
       <Filter>Program</Filter>
     </ClCompile>
     <ClCompile Include="AOC_Template.cpp" />
+    <ClCompile Include="AOC_Day22Test2.txt">
+      <Filter>Week4\Day22</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AOC_Precompiled.h" />
