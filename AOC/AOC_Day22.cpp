@@ -1,49 +1,36 @@
 #include "AOC_Precompiled.h"
 
-static uint64 locVolume(GC_Vector3i const& min, GC_Vector3i const& max)
+struct Cube : GC_Cube<int64>
 {
-	auto volume = max - min + GC_Vector3i(1); // inclusive of whole range
-	return (uint64)volume.x * volume.y * volume.z;
-}
-
-struct Cube
-{
-	GC_Vector3i min;
-	GC_Vector3i max;
-
 	GC_DynamicArray<Cube> FlipRegion;
 
-	void Flip(GC_Vector3i const& newMin, GC_Vector3i const& newMax)
+	void Flip(GC_Cube<int64> newCube)
 	{
 		for (uint ci = 0; ci < FlipRegion.Count(); ++ci)
 		{
 			Cube& c = FlipRegion[ci];
 
-			bool overlap = true;
-			for_range(3)
-				if (newMax[i] < c.min[i] || newMin[i] > c.max[i])
-					overlap = false;
-
-			if (!overlap)
-				continue;
-
-			// remove whole thing
-			if (newMax >= c.max && newMin <= c.min)
+			GC_Cube overlap;
+			if (newCube.Overlaps(c, overlap))
 			{
-				FlipRegion.RemoveAtFast(ci--);
-			}
-			else
-			{
-				c.Flip(GC_Max(c.min, newMin), GC_Min(c.max, newMax));
+				// remove whole thing
+				if (overlap == c)
+				{
+					FlipRegion.RemoveAtFast(ci--);
+				}
+				else
+				{
+					c.Flip(overlap);
+				}
 			}
 		}
 
-		FlipRegion.Add({newMin, newMax});
+		FlipRegion.Add({ newCube });
 	}
 
-	uint64 Volume() const
+	uint64 CalcVolume() const
 	{
-		return locVolume(min, max) - GC_Algorithm::Sum(FlipRegion, [](auto const& c) { return c.Volume(); });
+		return VolumeInclusive() - GC_Algorithm::Sum(FlipRegion, [](auto const& c) { return c.CalcVolume(); });
 	}
 };
 
@@ -57,8 +44,8 @@ static auto locPart1(char const* aFile, int aRange)
 		auto parts = GC_StrSplit<2>(line, " ");
 		auto rangeStrings = GC_StrSplit<3>(parts[1], ",");
 
-		GC_Vector3i newMin;
-		GC_Vector3i newMax;
+		GC_Vector3<int64> newMin(0);
+		GC_Vector3<int64> newMax(0);
 		bool valid = true;
 
 		for_index(auto r : rangeStrings)
@@ -79,14 +66,14 @@ static auto locPart1(char const* aFile, int aRange)
 
 		if (valid)
 		{
-			cubes.Flip(newMin, newMax);
+			cubes.Flip({ newMin, newMax });
 
 			if (parts[0][1] == 'f')
 				cubes.FlipRegion.PopBack();
 		}
 	}
 
-	return locVolume(cubes.min, cubes.max) - cubes.Volume();
+	return cubes.VolumeInclusive() - cubes.CalcVolume();
 }
 
 DEFINE_TEST_G(Part1, Day22)

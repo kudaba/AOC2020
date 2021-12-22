@@ -244,3 +244,38 @@ constexpr GC_Vector2<u64> GC_Vector2<u64>::operator/(u64 aScalar) const
 {
 	return GC_Vector2(x / aScalar, y / aScalar);
 }
+//-------------------------------------------------------------------------------------------------
+template <typename T>
+struct GC_Cube
+{
+	GC_Vector3<T> Min;
+	GC_Vector3<T> Max;
+
+	bool operator==(GC_Cube const& anOther) const { return Min == anOther.Min && Max == anOther.Max; }
+
+	T Volume() const
+	{
+		auto volume = Max - Min;
+		return volume.x * volume.y * volume.z;
+	}
+	T VolumeInclusive() const
+	{
+		auto volume = Max - Min + GC_Vector3i(1);
+		return volume.x * volume.y * volume.z;
+	}
+
+	bool Overlaps(GC_Cube const& anOther)
+	{
+		return anOther.Max > Min && anOther.Min < Max;
+	}
+	bool Overlaps(GC_Cube const& anOther, GC_Cube& anOverlappingRegion)
+	{
+		if (anOther.Max >= Min && anOther.Min <= Max)
+		{
+			anOverlappingRegion = { GC_Max(Min, anOther.Min), GC_Min(Max, anOther.Max) };
+			return true;
+		}
+
+		return false;
+	}
+};
