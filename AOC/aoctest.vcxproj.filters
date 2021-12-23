@@ -330,4 +330,12 @@
       <UniqueIdentifier>{0786c89b-8666-4ab0-80f7-15158c72077f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="AOC_Day23Test2.txt">
+      <Filter>Week4\Day23</Filter>
+    </Text>
+    <Text Include="AOC_Day23Part2.txt">
+      <Filter>Week4\Day23</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
