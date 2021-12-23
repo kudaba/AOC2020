@@ -244,6 +244,7 @@ constexpr GC_Vector2<u64> GC_Vector2<u64>::operator/(u64 aScalar) const
 {
 	return GC_Vector2(x / aScalar, y / aScalar);
 }
+
 //-------------------------------------------------------------------------------------------------
 template <typename T>
 struct GC_Cube
@@ -252,6 +253,7 @@ struct GC_Cube
 	GC_Vector3<T> Max;
 
 	bool operator==(GC_Cube const& anOther) const { return Min == anOther.Min && Max == anOther.Max; }
+	bool operator!=(GC_Cube const& anOther) const { return Min != anOther.Min || Max != anOther.Max; }
 
 	T Volume() const
 	{
@@ -277,5 +279,47 @@ struct GC_Cube
 		}
 
 		return false;
+	}
+
+	GC_HybridArray<GC_Cube, 6> Split(GC_Cube const& anOther)
+	{
+		GC_HybridArray<GC_Cube, 6> newCubes;
+
+		GC_Cube overlap;
+		if (Overlaps(anOther, overlap))
+		{
+			if (overlap != *this)
+			{
+				GC_Cube newCube = *this;
+
+				for_range(3)
+				{
+					if (overlap.Min[i] > Min[i])
+					{
+						newCube.Min[i] = Min[i];
+						newCube.Max[i] = overlap.Min[i] - 1;
+						newCubes.Add(newCube);
+					}
+					if (overlap.Max[i] < Max[i])
+					{
+						newCube.Min[i] = overlap.Max[i] + 1;
+						newCube.Max[i] = Max[i];
+						newCubes.Add(newCube);
+					}
+
+					newCube.Min[i] = overlap.Min[i];
+					newCube.Max[i] = overlap.Max[i];
+				}
+			}
+			else
+			{
+				if (newCubes.Count() > 6)
+					newCubes.PopBack();
+			}
+		}
+		else
+			newCubes.Add(*this);
+
+		return newCubes;
 	}
 };
