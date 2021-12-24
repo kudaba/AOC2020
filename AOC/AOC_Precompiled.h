@@ -323,3 +323,139 @@ struct GC_Cube
 		return newCubes;
 	}
 };
+
+//-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+template <typename T, typename P, typename CostType = uint>
+GC_Optional<CostType> RunDijsktraShortStep(T const& anInitialState, T const& anEndState, P const& aPredicate, uint aSizeHint = 0)
+{
+	GC_HashMap<uint, GC_HybridArray<T, 32>> queue;
+	queue.Reserve(aSizeHint);
+	queue.GetOrAdd(0).Add(anInitialState);
+
+	GC_HashSet<T> visited;
+	visited.Reserve(aSizeHint);
+
+	CostType cost = 0;
+
+	auto addToQueue = [&](T const& aState, CostType aCost)
+	{
+		// Note it seems to be faster to just add the new state instead of filtering out visited states
+		queue.GetOrAdd(cost + aCost).Add(aState);
+	};
+
+	while (queue.Count())
+	{
+		auto* costQueue = queue.Find(cost);
+		while (!costQueue)
+		{
+			++cost;
+			costQueue = queue.Find(cost);
+		}
+
+		T candidate = costQueue->Last();
+		costQueue->PopBack();
+		if (costQueue->IsEmpty())
+			queue.Remove(cost);
+
+		if (!visited.Add(candidate))
+			continue;
+
+		if (candidate == anEndState)
+			return cost;
+
+		aPredicate(candidate, addToQueue);
+	}
+
+	return nullopt;
+}
+//-------------------------------------------------------------------------------------------------
+// Custom visit predicate, set visited state in predicate
+//-------------------------------------------------------------------------------------------------
+template <typename T, typename V, typename P, typename CostType = uint, typename ListType = GC_HybridArray<T, 32>>
+GC_Optional<CostType> RunDijsktraShortStepV(T const& anInitialState, T const& anEndState, V const& aVisited, P const& aPredicate, uint aSizeHint = 0)
+{
+	GC_HashMap<uint, ListType> queue;
+	queue.Reserve(aSizeHint);
+	queue.GetOrAdd(0).Add(anInitialState);
+
+	CostType cost = 0;
+
+	auto addToQueue = [&](T const& aState, CostType aCost) { queue.GetOrAdd(cost + aCost).Add(aState); };
+
+	while (queue.Count())
+	{
+		auto* costQueue = queue.Find(cost);
+		while (!costQueue)
+		{
+			++cost;
+			costQueue = queue.Find(cost);
+		}
+
+		T candidate = costQueue->Last();
+		costQueue->PopBack();
+		if (costQueue->IsEmpty())
+			queue.Remove(cost);
+
+		if (aVisited(candidate))
+			continue;
+
+		if (candidate == anEndState)
+			return cost;
+
+		aPredicate(candidate, addToQueue);
+	}
+
+	return nullopt;
+}
+
+//-------------------------------------------------------------------------------------------------
+// Not great, memcpying the array kills it, might be useful if states are sparse and costs are huge
+//-------------------------------------------------------------------------------------------------
+template <typename T, typename P, typename CostType = uint, typename ListType = GC_HybridArray<T, 32>>
+GC_Optional<CostType> RunDijsktraLongStep(T const& anInitialState, T const& anEndState, P const& aPredicate, uint aSizeHint = 0)
+{
+	GC_DynamicArray<GC_Pair<uint, ListType>> queue;
+	queue.Reserve(aSizeHint);
+
+	GC_HashSet<T> visited;
+	visited.Reserve(aSizeHint);
+
+	CostType cost = 0;
+
+	auto addToQueue = [&](T const& aState, CostType aCost)
+	{
+		CostType const newCost = cost + aCost;
+		auto iter = GC_LowerBound(queue.begin(), queue.end(), newCost, [](auto& s, CostType cost) { return s.myFirst > cost; });
+		if (iter != queue.end() && iter->myFirst == newCost)
+			iter->mySecond.Add(aState);
+		else
+		{
+			ListType newList;
+			newList.Add(aState);
+			queue.Insert(uint(iter - queue.begin()), { newCost, GC_Move(newList) });
+		}
+	};
+
+	addToQueue(anInitialState, 0);
+
+	while (queue.Count())
+	{
+		auto& costQueue = queue.Last();
+		cost = costQueue.myFirst;
+		T candidate = costQueue.mySecond.Last();
+		costQueue.mySecond.PopBack();
+		if (costQueue.mySecond.IsEmpty())
+			queue.PopBack();
+
+		if (!visited.Add(candidate))
+			continue;
+
+		if (candidate == anEndState)
+			return cost;
+
+		aPredicate(candidate, addToQueue);
+	}
+
+	return nullopt;
+}

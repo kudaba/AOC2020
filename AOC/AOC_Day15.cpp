@@ -8,47 +8,21 @@ struct Tile
 
 static uint locGetLowestCost(GC_DynamicArray2D<Tile>& data)
 {
-	auto const end = data.Size() - GC_Vector2u(1);
-	GC_HashMap<uint, GC_HybridArray<GC_Vector2u, 32>> queue;
-	queue.Reserve(data.Size().Area());
-	queue.Add(0, GC_HybridArray<GC_Vector2u, 32>(1, { 0,0 }));
-
-	uint cost = 0;
-
-	while (queue.Count())
-	{
-		GC_HybridArray<GC_Vector2u, 32>* costQueue = queue.Find(cost);
-		while (!costQueue)
+	return RunDijsktraShortStepV<GC_Vector2u>({ 0,0 }, data.Size() - GC_Vector2u(1),
+		[&](GC_Vector2u const& candidate) { bool visited = data(candidate).Visited; data(candidate).Visited = true; return visited; },
+		[&](GC_Vector2u const& candidate, auto const& anAddToQueue)
 		{
-			++cost;
-			costQueue = queue.Find(cost);
-		}
-
-		auto const candidate = costQueue->Last();
-		costQueue->PopBack();
-		if (costQueue->IsEmpty())
-			queue.Remove(cost);
-
-		auto& tile = data(candidate);
-
-		if (tile.Visited) continue;
-		tile.Visited = true;
-
-		if (end == candidate)
-			return cost;
-
-		for (auto dir : GC_Cardinal::Range())
-		{
-			GC_Vector2u next = GC_Vector2u(candidate) + GC_CardinalDirection(dir);
-			if (next < data.Size())
+			for (auto dir : GC_Cardinal::Range())
 			{
-				auto const& ntile = data(next);
-				if (!ntile.Visited)
-					queue.GetOrAdd(cost + ntile.Cost).Add(next);
+				GC_Vector2u next = GC_Vector2u(candidate) + GC_CardinalDirection(dir);
+				if (next < data.Size())
+				{
+					auto const& ntile = data(next);
+					if (!ntile.Visited)
+						anAddToQueue(next, ntile.Cost);
+				}
 			}
-		}
-	}
-	return 0;
+		}, data.Size().Area()).GetDefault(0);
 }
 
 static void locExpandBoard(GC_DynamicArray2D<Tile>& data, uint extraSize)
