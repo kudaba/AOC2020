@@ -127,6 +127,8 @@ static uint locDay19Part2(char const* aFile)
 
 DEFINE_TEST_G(Part2, Day19)
 {
+#if RUN_TESTS
 	TEST_EQ(locDay19Part2("AOC_Day19Test2.txt"), 12);
+#endif
 	TEST_EQ(locDay19Part2("AOC_Day19Part1.txt"), 339);
 }

@@ -57,7 +57,6 @@ DEFINE_TEST_G(Part2, Day2)
 {
 	TEST_EQ(locGetValidPW2(testData), 1);
 	GC_String text;
-	Printf("%s\n", GC_Path::GetAbsolutePath("Day2Part1.txt").ToString());
 	GC_File::ReadAllText("AOC_Day2Part1.txt", text);
 	TEST_EQ(locGetValidPW2(text), 428);
 }

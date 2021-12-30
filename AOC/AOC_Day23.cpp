@@ -99,22 +99,22 @@ static uint64 locDay23Part2(char const* aFile, uint numCups, uint numLoops, bool
 
 	cups[prev] = current;
 
+
 	for_range(numLoops)
 	{
-		uint temp = cups[current];
-		uint temp2 = cups[temp];
-		uint temp3 = cups[temp2];
-		uint nextCurrent = cups[temp3];
+		uint const temp = cups[current];
+		uint const temp2 = cups[temp];
+		uint const temp3 = cups[temp2];
+		uint const nextCurrent = cups[temp3];
 		cups[current] = nextCurrent;
 
 		uint next = 0;
 		for_range_v(c, 4)
 		{
-			int nextValue = (int)current - (c + 1);
-			if (nextValue < 1)
-				nextValue += numCups;
+			int const nv1 = (int)current - (c + 1);
+			uint const nextValue = nv1 + (nv1 < 1) * numCups;
 
-			if ((uint)nextValue == temp || (uint)nextValue == temp2 || (uint)nextValue == temp3)
+			if (nextValue == temp || nextValue == temp2 || nextValue == temp3)
 				continue;
 
 			next = nextValue;
@@ -145,10 +145,12 @@ static uint64 locDay23Part2(char const* aFile, uint numCups, uint numLoops, bool
 
 DEFINE_TEST_G(Part2, Day23)
 {
+#if RUN_TESTS
 	TEST_EQ(locDay23Part2("AOC_Day23Test.txt", 9, 10, true), 92658374);
 	TEST_EQ(locDay23Part2("AOC_Day23Test.txt", 9, 100, true), 67384529);
 	TEST_EQ(locDay23Part2("AOC_Day23Part1.txt", 9, 100, true), 95648732);
 
 	TEST_EQ(locDay23Part2("AOC_Day23Test.txt", 1000000, 10000000, false), 149245887792);
+#endif
 	TEST_EQ(locDay23Part2("AOC_Day23Part1.txt", 1000000, 10000000, false), 192515314252);
 }

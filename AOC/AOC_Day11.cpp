@@ -42,6 +42,8 @@ static uint locDay11Part1(char const* aFile)
 				char const c = map(x, y);
 				if (c == '.') continue;
 
+				uint const limit = c == '#' ? 4 : 1;
+
 				uint occCount = 0;
 				for_range ((uint)GC_Cardinal8::Count)
 				{
@@ -51,13 +53,11 @@ static uint locDay11Part1(char const* aFile)
 						if (map(test) == '#')
 							++occCount;
 					}
+					if (occCount == limit) break;
 				}
 
-				if ((c == '#' && occCount >= 4) ||
-					(c == 'L' && occCount == 0))
-				{
+				if (occCount == (c == '#' ? 4u : 0u))
 					changes.Add({ x, y });
-				}
 			}
 		}
 
@@ -80,7 +80,9 @@ static uint locDay11Part1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day11)
 {
+#if RUN_TESTS
 	TEST_EQ(locDay11Part1("AOC_Day11Test.txt"), 37);
+#endif
 	TEST_EQ(locDay11Part1("AOC_Day11Part1.txt"), 2321);
 }
 
@@ -119,8 +121,10 @@ static uint locDay11Part2(char const* aFile)
 				char const c = map(x, y);
 				if (c == '.') continue;
 
+				uint const limit = c == '#' ? 5 : 1;
+
 				uint occCount = 0;
-				for_range ((uint)GC_Cardinal8::Count)
+				for_range((uint)GC_Cardinal8::Count)
 				{
 					GC_Vector2i test = dirs[i] + GC_Vector2u{ x, y };
 					while (GC_InRangeUnSafe(test, r0, r1))
@@ -135,13 +139,12 @@ static uint locDay11Part2(char const* aFile)
 							break;
 						test += dirs[i];
 					}
+
+					if (occCount == limit) break;
 				}
 
-				if ((c == '#' && occCount >= 5) ||
-					(c == 'L' && occCount == 0))
-				{
+				if (occCount == (c == '#' ? 5u : 0u))
 					changes.Add({ x, y });
-				}
 			}
 		}
 
@@ -164,6 +167,8 @@ static uint locDay11Part2(char const* aFile)
 
 DEFINE_TEST_G(Part2, Day11)
 {
+#if RUN_TESTS
 	TEST_EQ(locDay11Part2("AOC_Day11Test.txt"), 26);
+#endif
 	TEST_EQ(locDay11Part2("AOC_Day11Part1.txt"), 2102);
 }

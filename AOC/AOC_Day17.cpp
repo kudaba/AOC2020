@@ -14,6 +14,7 @@ static uint locDay17(char const* aFile)
 	typename GC_VectorDirections<T>::All directions;
 
 	GC_HashSet<T> active;
+	active.Reserve(10000);
 	for_range_v(x, width)
 	{
 		for_range_v(y, width)
@@ -24,6 +25,7 @@ static uint locDay17(char const* aFile)
 	}
 
 	GC_HashMap<T, uint> counts;
+	counts.Reserve(10000);
 	for_range(6)
 	{
 		counts.Clear();
@@ -90,6 +92,8 @@ DEFINE_TEST_G(Part1, Day17)
 
 DEFINE_TEST_G(Part2, Day17)
 {
+#if RUN_TESTS
 	TEST_EQ(locDay17<GC_Vector4i>("AOC_Day17Test.txt"), 848);
+#endif
 	TEST_EQ(locDay17<GC_Vector4i>("AOC_Day17Part1.txt"), 1892);
 }

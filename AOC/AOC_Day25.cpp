@@ -14,16 +14,10 @@ static uint64 locDay25Part1(char const* aFile)
 	uint64 value = 1;
 	uint64 const subject = 7;
 	uint64 const divisor = 20201227;
-	uint loops = 0;
+	uint64 result = 1;
 	while (value != key1)
 	{
 		value = (value * subject) % divisor;
-		++loops;
-	}
-
-	uint64 result = 1;
-	for_range(loops)
-	{
 		result = (result * key2) % divisor;
 	}
 
@@ -32,7 +26,9 @@ static uint64 locDay25Part1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day25)
 {
+#if RUN_TESTS
 	TEST_EQ(locDay25Part1("AOC_Day25Test.txt"), 14897079);
+#endif
 	TEST_EQ(locDay25Part1("AOC_Day25Part1.txt"), 16457981);
 }
 
