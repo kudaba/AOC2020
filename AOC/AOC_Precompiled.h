@@ -26,17 +26,6 @@ public:
 	static uint64 theHighResTime;
 };
 
-
-constexpr void for_range2d_next(uint& x, uint& y, uint maxx)
-{
-	++x;
-	bool const xmax = x == maxx;
-	y += xmax;
-	x = x * !xmax;
-}
-#define for_range2d_v(x, y, maxx, maxy) for (uint x = 0, y = 0; x < maxx && y < maxy; for_range2d_next(x, y, maxx))
-#define for_range2d(maxx, maxy) for_range2d_v(x, y, maxx, maxy)
-
 // Todo; add to graphium
 namespace GC_File
 {

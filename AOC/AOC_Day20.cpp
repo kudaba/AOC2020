@@ -1,58 +1,53 @@
 #include "AOC_Precompiled.h"
 
-static auto locPart1(char const* aFile, int iters, bool floppy = false)
+static auto locParseData(char const* aFile)
 {
-	GC_String text = GC_File::ReadAllText(aFile);
-	auto parts = GC_StrSplit<2>(text, "\n\n");
-	auto converter = parts[0];
-	auto imageData = GC_StrSplit(parts[1], "\n");
-
-	GC_Vector2u const isize = GC_Vector2u(imageData.Count(), imageData[0].Count());
-	GC_Vector2u const extra = GC_Vector2u(iters * 2 + 4);
-	GC_Vector2u const size = isize + extra;
-	GC_Vector2u const hsize = extra / 2;
-
-	GC_DynamicArray2D<bool> image;
-	GC_Algorithm::Resize(image, size, false);
-	GC_DynamicArray2D<bool> temp;
-	GC_Algorithm::Resize(temp, size, false);
-
-	for_range2d(imageData.Count(), imageData[0].Count())
-		image(x + hsize.x, y + hsize.y) = imageData[y][x] == '#';
-
-	for_range(iters)
-	{
-		auto input = image.Area(hsize - GC_Vector2u(i), size - hsize + GC_Vector2u(i));
-		auto output = temp.Area(hsize - GC_Vector2u(i+1), size - hsize + GC_Vector2u(i+1));
-
-		for_range2d(output.Width(), output.Height())
+	// By line with parse function
+	return GC_File::Parse<int>(aFile, [](auto aLine)
 		{
-			uint value = 0;
+			return GC_Atoi(aLine);
+		});
+}
 
-			for_range2d_v(xx, yy, 3, 3)
-			{
-				GC_Vector2u const pos(x + xx - 2, y + yy - 2);
-				bool const lit = (pos < input.Size()) ? input(pos) : (floppy && (i&1)); // use image 0 as the flashing indicator for the infinite
-				value = (value << 1) | int(lit);
-			}
+static auto locPart1(char const* aFile)
+{
+	uint64 result = 0;
 
-			output(x, y) = converter[value] == '#';
-		}
-
-		image.Swap(temp);
+	for (auto item : locParseData(aFile))
+	{
+		(void)item;
 	}
 
-	return GC_Algorithm::Sum(image.AsRange(), [](bool b) {return int(b); });
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
+	{
+	}
+
+	// By Block parsing (block of lines separate by two new lines)
+	GC_String text;
+	GC_File::ReadAllText(aFile, text);
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
+	{
+
+	}
+
+	return result;
 }
 
 DEFINE_TEST_G(Part1, Day20)
 {
-	TEST_EQ(locPart1("AOC_Day20Test.txt", 2), 35);
-	TEST_EQ(locPart1("AOC_Day20Part1.txt", 2, true), 5765);
+	TEST_EQ(locPart1("AOC_Day20Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day20Part1.txt"), 0);
+}
+
+static auto locPart2(char const*)
+{
+	uint64 result = 0;
+	return result;
 }
 
 DEFINE_TEST_G(Part2, Day20)
 {
-	TEST_EQ(locPart1("AOC_Day20Test.txt", 50), 3351);
-	TEST_EQ(locPart1("AOC_Day20Part1.txt", 50, true), 18509);
+	TEST_EQ(locPart2("AOC_Day20Test.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day20Part1.txt"), 0);
 }

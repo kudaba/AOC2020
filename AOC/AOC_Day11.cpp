@@ -1,34 +1,34 @@
 #include "AOC_Precompiled.h"
 
-static void locUpdate(GC_ArrayRange2D<char> data, GC_Vector2u pos, uint64& result)
+static auto locParseData(char const* aFile)
 {
-	if (data(pos) < 10) return;
-
-	data(pos) = 0;
-	result++;
-
-	for (auto dir : GC_Cardinal8::Range())
-	{
-		auto n = pos + GC_CardinalDirection(dir);
-		if (n.x < 10 && n.y < 10 && data(n))
+	// By line with parse function
+	return GC_File::Parse<int>(aFile, [](auto aLine)
 		{
-			data(n)++;
-			locUpdate(data, n, result);
-		}
-	}
+			return GC_Atoi(aLine);
+		});
 }
 
 static auto locPart1(char const* aFile)
 {
-	auto data = GC_File::Parse2d<char>(aFile, [](char c) { return char(c - '0'); });
-
 	uint64 result = 0;
 
-	for_range(100)
+	for (auto item : locParseData(aFile))
 	{
-		for (char& c : data.AsRange()) ++c;
-		for_range2d(10,10)
-			locUpdate(data, { x, y }, result);
+		(void)item;
+	}
+
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
+	{
+	}
+
+	// By Block parsing (block of lines separate by two new lines)
+	GC_String text;
+	GC_File::ReadAllText(aFile, text);
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
+	{
+
 	}
 
 	return result;
@@ -36,39 +36,18 @@ static auto locPart1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day11)
 {
-	TEST_EQ(locPart1("AOC_Day11Test.txt"), 1656);
-	TEST_EQ(locPart1("AOC_Day11Part1.txt"), 1702);
+	TEST_EQ(locPart1("AOC_Day11Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day11Part1.txt"), 0);
 }
 
-static auto locPart2(char const* aFile)
+static auto locPart2(char const*)
 {
-	auto data = GC_File::Parse2d<char>(aFile, [](char c) { return char(c - '0'); });
-
 	uint64 result = 0;
-
-	for (uint64 i = 1; ; ++i)
-	{
-		for (char& c : data.AsRange()) ++c;
-		for_range2d(10,10)
-			locUpdate(data, { x, y }, result);
-
-		bool all = true;
-		for_range2d(10,10)
-			if (data(x,y) != 0)
-			{
-				all = false;
-				break;
-			}
-
-		if (all)
-			return i;
-	}
-
-	//return result;
+	return result;
 }
 
 DEFINE_TEST_G(Part2, Day11)
 {
-	TEST_EQ(locPart2("AOC_Day11Test.txt"), 195);
-	TEST_EQ(locPart2("AOC_Day11Part1.txt"), 251);
+	TEST_EQ(locPart2("AOC_Day11Test.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day11Part1.txt"), 0);
 }

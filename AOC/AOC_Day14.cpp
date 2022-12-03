@@ -1,83 +1,53 @@
 #include "AOC_Precompiled.h"
 
-struct Rule
+static auto locParseData(char const* aFile)
 {
-	GC_String Pattern;
-	char Replacement;
-	uint Left;
-	uint Right;
-	uint64 Count;
-};
-
-inline const auto& GC_HashKeyResolver(Rule const& aValue) { return aValue.Pattern; }
-
-static auto locPart1(char const* aFile, uint iterations)
-{
-	auto text = GC_File::ReadAllText(aFile);
-	auto parts = GC_StrSplit<2>(text, "\n\n");
-
-	GC_HashSet<Rule> rules;
-
-	// setup rules
-	for (GC_StrSlice ln; GC_StrLine(parts[1], ln);)
-	{
-		auto rparts = GC_StrSplit<2>(ln, " -> ");
-		rules.Add({ rparts[0], rparts[1][0], 0, 0, 0 });
-	}
-
-	// optimize rules
-	for (auto& r : rules)
-	{
-		char left[3] = { r.Pattern[0], r.Replacement, 0 };
-		char right[3] = { r.Replacement, r.Pattern[1], 0 };
-
-		r.Left = rules.IndexOf(rules[left]);
-		r.Right = rules.IndexOf(rules[right]);
-	}
-
-	// prime data
-	for_range (parts[0].Count() - 1)
-		rules.Find(GC_String(parts[0].Buffer() + i, 2))->Count++;
-
-	// run algo
-	GC_HashSet<Rule> rules2 = rules;
-
-	for_range_v(x, iterations)
-	{
-		for (auto & r : rules2)
-			r.Count = 0;
-
-		for (auto r : rules)
+	// By line with parse function
+	return GC_File::Parse<int>(aFile, [](auto aLine)
 		{
-			rules2.GetByIndex(r.Left).Count += r.Count;
-			rules2.GetByIndex(r.Right).Count += r.Count;
-		}
+			return GC_Atoi(aLine);
+		});
+}
 
-		rules.Swap(rules2);
+static auto locPart1(char const* aFile)
+{
+	uint64 result = 0;
+
+	for (auto item : locParseData(aFile))
+	{
+		(void)item;
 	}
 
-	uint64 counts[26] = {};
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
+	{
+	}
 
-	for (auto r : rules)
-		counts[r.Pattern[1] - 'A'] += r.Count;
-	counts[parts[0][0] - 'A']++;
+	// By Block parsing (block of lines separate by two new lines)
+	GC_String text;
+	GC_File::ReadAllText(aFile, text);
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
+	{
 
-	uint64 min = UINT64_MAX;
-	for (auto c : counts)
-		if (c)
-			min = GC_Min(min, c);
+	}
 
-	return GC_Algorithm::Max(counts) - min;
+	return result;
 }
 
 DEFINE_TEST_G(Part1, Day14)
 {
-	TEST_EQ(locPart1("AOC_Day14Test.txt", 10), 1588);
-	TEST_EQ(locPart1("AOC_Day14Part1.txt", 10), 3697);
+	TEST_EQ(locPart1("AOC_Day14Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day14Part1.txt"), 0);
+}
+
+static auto locPart2(char const*)
+{
+	uint64 result = 0;
+	return result;
 }
 
 DEFINE_TEST_G(Part2, Day14)
 {
-	TEST_EQ(locPart1("AOC_Day14Test.txt", 40), 2188189693529);
-	TEST_EQ(locPart1("AOC_Day14Part1.txt", 40), 4371307836157);
+	TEST_EQ(locPart2("AOC_Day14Test.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day14Part1.txt"), 0);
 }
