@@ -40,8 +40,9 @@ DEFINE_TEST_G(Part1, Day3)
 	TEST_EQ(locPart1("AOC_Day3Part1.txt"), 0);
 }
 
-static auto locPart2(char const*)
+static auto locPart2(char const* aFile)
 {
+	(void)aFile;
 	uint64 result = 0;
 	return result;
 }
