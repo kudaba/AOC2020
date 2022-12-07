@@ -111,5 +111,5 @@ static auto locPart2(char const* aFile)
 DEFINE_TEST_G(Part2, Day5)
 {
 	TEST_STR_EQ(locPart2("AOC_Day5Test.txt"), "MCD");
-	TEST_STR_EQ(locPart2("AOC_Day5Part1.txt"), 0);
+	TEST_STR_EQ(locPart2("AOC_Day5Part1.txt"), "GMPMLWNMG");
 }

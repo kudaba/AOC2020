@@ -6,7 +6,6 @@ void Program::Load(char const* aFile)
 	auto lines = GC_File::ReadAllLines(aFile);
 
 	Clear();
-	Reserve(lines.Count());
 
 	for (auto line : lines)
 	{

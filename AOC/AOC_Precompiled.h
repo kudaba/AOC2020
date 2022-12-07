@@ -34,7 +34,6 @@ namespace GC_File
 	{
 		auto lines = GC_File::ReadAllLines(aFile);
 		GC_DynamicArray<T> data;
-		data.Reserve(lines.Count());
 
 		for (auto line : lines)
 			if (!aReadLine(line, data.Add()))
@@ -48,7 +47,6 @@ namespace GC_File
 	{
 		auto lines = GC_File::ReadAllLines(aFile);
 		GC_DynamicArray<T> data;
-		data.Reserve(lines.Count());
 
 		for (auto line : lines)
 			data.Add(aReadLine(line));
@@ -60,10 +58,11 @@ namespace GC_File
 	GC_DynamicArray2D<T> Parse2d(char const* aFile, GC_Function<T (char c)> aRead)
 	{
 		auto lines = GC_File::ReadAllLines(aFile);
+		auto tokens = lines.GetAll();
 		GC_DynamicArray2D<T> data;
-		data.SetSize({ lines[0].Count(), lines.Count() });
+		data.SetSize({ tokens[0].Count(), tokens.Count() });
 
-		for_index_v(y, GC_StrSlice const& l : lines)
+		for_index_v(y, GC_StrSlice const& l : tokens)
 			for_index_v(x, char c : l)
 			data(x, y) = aRead(c);
 		return data;
@@ -73,10 +72,11 @@ namespace GC_File
 	GC_DynamicArray2D<T> Parse2d(char const* aFile, char const* aSeparator, GC_Function<T (GC_StrSlice)> aRead)
 	{
 		auto lines = GC_File::ReadAllLines(aFile);
+		auto tokens = lines.GetAll();
 		GC_DynamicArray2D<T> data;
-		data.SetSize({ lines[0].Count(), lines.Count() });
+		data.SetSize({ tokens[0].Count(), tokens.Count() });
 
-		for_index_v(y, GC_StrSlice const& l : lines)
+		for_index_v(y, GC_StrSlice const& l : tokens)
 		{
 			GC_StrSlice p;
 			uint x;
