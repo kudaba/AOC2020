@@ -1,34 +1,15 @@
 #include "AOC_Precompiled.h"
 
-static auto locParseData(char const* aFile)
-{
-	// By line with parse function
-	return GC_File::Parse<int>(aFile, [](auto aLine)
-		{
-			return GC_Atoi(aLine);
-		});
-}
-
 static auto locPart1(char const* aFile)
 {
-	uint64 result = 0;
+	int64 result = 0;
 
-	for (auto item : locParseData(aFile))
+	GC_String data = GC_File::ReadAllText(aFile);
+
+	for (char c : data)
 	{
-		(void)item;
-	}
-
-	// By line parsing
-	for (auto line : GC_File::ReadAllLines(aFile))
-	{
-	}
-
-	// By Block parsing (block of lines separate by two new lines)
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
-	{
-
+		if (c == '(') ++result;
+		else if (c == ')') --result;
 	}
 
 	return result;
@@ -36,19 +17,30 @@ static auto locPart1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day1)
 {
-	TEST_EQ(locPart1("AOC_Day1Test.txt"), 0);
-	TEST_EQ(locPart1("AOC_Day1Part1.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day1Test.txt"), -3);
+	TEST_EQ(locPart1("AOC_Day1Part1.txt"), 280);
 }
 
-static auto locPart2(char const* aFile)
+static int64 locPart2(char const* aFile)
 {
-	(void)aFile;
-	uint64 result = 0;
+	int64 result = 0;
+
+	GC_String data = GC_File::ReadAllText(aFile);
+
+	for_index(char c : data)
+	{
+		if (c == '(') ++result;
+		else if (c == ')') --result;
+
+		if (result < 0)
+			return i + 1;
+	}
+
 	return result;
 }
 
 DEFINE_TEST_G(Part2, Day1)
 {
-	TEST_EQ(locPart2("AOC_Day1Test.txt"), 0);
-	TEST_EQ(locPart2("AOC_Day1Part1.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day1Test.txt"), 1);
+	TEST_EQ(locPart2("AOC_Day1Part1.txt"), 1797);
 }
