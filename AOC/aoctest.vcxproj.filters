@@ -81,9 +81,6 @@
       <Filter>Program</Filter>
     </ClCompile>
     <ClCompile Include="AOC_Template.cpp" />
-    <ClCompile Include="AOC_Day22Test2.txt">
-      <Filter>Week4\Day22</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AOC_Precompiled.h" />
@@ -234,9 +231,9 @@
     <ClInclude Include="AOC_Day4Test.txt">
       <Filter>Week1\Day4</Filter>
     </ClInclude>
-    <ClInclude Include="AOC_Day6Part2.txt">
-      <Filter>Week1\Day6</Filter>
-    </ClInclude>
+    <ClInclude Include="..\README.md" />
+    <ClInclude Include="AOC_Day21Part1.txt" />
+    <ClInclude Include="AOC_Day21Test.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Week1">
@@ -331,11 +328,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="AOC_Day23Test2.txt">
-      <Filter>Week4\Day23</Filter>
+    <Text Include="AOC_Day9Test2.txt">
+      <Filter>Week2\Day9</Filter>
     </Text>
-    <Text Include="AOC_Day23Part2.txt">
-      <Filter>Week4\Day23</Filter>
+    <Text Include="AOC_Day5Test2.txt">
+      <Filter>Week1\Day5</Filter>
     </Text>
   </ItemGroup>
 </Project>
