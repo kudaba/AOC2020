@@ -1,54 +1,66 @@
 #include "AOC_Precompiled.h"
 
-static auto locParseData(char const* aFile)
-{
-	// By line with parse function
-	return GC_File::Parse<int>(aFile, [](auto aLine)
-		{
-			return GC_Atoi(aLine);
-		});
-}
-
 static auto locPart1(char const* aFile)
 {
+	uint64 length = 0;
 	uint64 result = 0;
-
-	for (auto item : locParseData(aFile))
-	{
-		(void)item;
-	}
 
 	// By line parsing
 	for (auto line : GC_File::ReadAllLines(aFile))
 	{
+		length += line.Count();
+
+		auto sub = line.Range(1, line.Count() - 2);
+		for_range(sub.Count())
+		{
+			if (sub[i] == '\\')
+			{
+				if (sub[i + 1] == 'x')
+					i += 3;
+				else
+					++i;
+			}
+			++result;
+		}
 	}
 
-	// By Block parsing (block of lines separate by two new lines)
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
-	{
-
-	}
-
-	return result;
+	return length - result;
 }
 
 DEFINE_TEST_G(Part1, Day8)
 {
-	TEST_EQ(locPart1("AOC_Day8Test.txt"), 0);
-	TEST_EQ(locPart1("AOC_Day8Part1.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day8Test.txt"), 12);
+	TEST_EQ(locPart1("AOC_Day8Part1.txt"), 1371);
 }
 
 static auto locPart2(char const* aFile)
 {
-	(void)aFile;
+	uint64 length = 0;
 	uint64 result = 0;
-	return result;
+
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
+	{
+		length += line.Count();
+		result += 6;
+
+		auto sub = line.Range(1, line.Count() - 2);
+		for (char c : sub)
+		{
+			++result;
+
+			if (c == '\"')
+				++result;
+			else if (c == '\\')
+				++result;
+		}
+	}
+
+	return result - length;
 }
 
 DEFINE_TEST_G(Part2, Day8)
 {
-	TEST_EQ(locPart2("AOC_Day8Test.txt"), 0);
-	TEST_EQ(locPart2("AOC_Day8Part1.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day8Test.txt"), 19);
+	TEST_EQ(locPart2("AOC_Day8Part1.txt"), 2117);
 }
