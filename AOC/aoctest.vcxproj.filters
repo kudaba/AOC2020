@@ -272,9 +272,6 @@
     <Filter Include="Week2\Day8">
       <UniqueIdentifier>{7f3d1dfc-a2b6-4beb-84a1-b1055f77b7d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Week2\Day9">
-      <UniqueIdentifier>{4a559cca-f353-436b-bcf8-2f0ee451d4d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Week2\Day10">
       <UniqueIdentifier>{ce620f80-1e8f-44c9-95f7-f41f91b81064}</UniqueIdentifier>
     </Filter>
@@ -326,10 +323,16 @@
     <Filter Include="Program">
       <UniqueIdentifier>{0786c89b-8666-4ab0-80f7-15158c72077f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Week2\Day9">
+      <UniqueIdentifier>{4a559cca-f353-436b-bcf8-2f0ee451d4d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AOC_Day9Test2.txt">
       <Filter>Week2\Day9</Filter>
+    </Text>
+    <Text Include="AOC_Day5Test2.txt">
+      <Filter>Week1\Day5</Filter>
     </Text>
   </ItemGroup>
 </Project>

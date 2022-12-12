@@ -3,9 +3,7 @@
 static auto locPart1(char const* aFile)
 {
 	auto data = GC_File::Parse2d<char>(aFile, [](char c) -> char { return c - '0'; });
-	GC_DynamicArray2D<bool> visited;
-	visited.SetSize(data.Size());
-	GC_MemZero(visited.begin(), visited.SizeInBytes());
+	GC_DynamicArray2D<bool> visited(data.Size(), 0);
 
 	uint64 result = (data.Width() + data.Height() - 2) * 2;
 
