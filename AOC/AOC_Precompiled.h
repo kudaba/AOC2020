@@ -410,10 +410,10 @@ GC_Optional<CostType> RunDijsktraShortStepV(T const& anInitialState, T const& an
 //-------------------------------------------------------------------------------------------------
 // Not great, memcpying the array kills it, might be useful if states are sparse and costs are huge
 //-------------------------------------------------------------------------------------------------
-template <typename T, typename P, typename CostType = uint, typename ListType = GC_HybridArray<T, 32>>
+template <typename T, typename CostType = uint, typename P, typename ListType = GC_HybridArray<T, 32>>
 GC_Optional<CostType> RunDijsktraLongStep(T const& anInitialState, T const& anEndState, P const& aPredicate, uint aSizeHint = 0)
 {
-	GC_DynamicArray<GC_Pair<uint, ListType>> queue;
+	GC_DynamicArray<GC_Pair<CostType, ListType>> queue;
 	queue.Reserve(aSizeHint);
 
 	GC_HashSet<T> visited;
@@ -424,9 +424,9 @@ GC_Optional<CostType> RunDijsktraLongStep(T const& anInitialState, T const& anEn
 	auto addToQueue = [&](T const& aState, CostType aCost)
 	{
 		CostType const newCost = cost + aCost;
-		auto iter = GC_LowerBound(queue.begin(), queue.end(), newCost, [](auto& s, CostType cost) { return s.myFirst > cost; });
-		if (iter != queue.end() && iter->myFirst == newCost)
-			iter->mySecond.Add(aState);
+		auto iter = GC_LowerBound(queue.begin(), queue.end(), newCost, [](auto& s, CostType cost) { return s.First > cost; });
+		if (iter != queue.end() && iter->First == newCost)
+			iter->Second.Add(aState);
 		else
 		{
 			ListType newList;
@@ -440,10 +440,10 @@ GC_Optional<CostType> RunDijsktraLongStep(T const& anInitialState, T const& anEn
 	while (queue.Count())
 	{
 		auto& costQueue = queue.Last();
-		cost = costQueue.myFirst;
-		T candidate = costQueue.mySecond.Last();
-		costQueue.mySecond.PopBack();
-		if (costQueue.mySecond.IsEmpty())
+		cost = costQueue.First;
+		T candidate = costQueue.Second.Last();
+		costQueue.Second.PopBack();
+		if (costQueue.Second.IsEmpty())
 			queue.PopBack();
 
 		if (!visited.Add(candidate))
