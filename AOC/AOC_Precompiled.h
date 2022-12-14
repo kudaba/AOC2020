@@ -411,7 +411,7 @@ GC_Optional<CostType> RunDijsktraShortStepV(T const& anInitialState, T const& an
 // Not great, memcpying the array kills it, might be useful if states are sparse and costs are huge
 //-------------------------------------------------------------------------------------------------
 template <typename T, typename CostType = uint, typename P, typename ListType = GC_HybridArray<T, 32>>
-GC_Optional<CostType> RunDijsktraLongStep(T const& anInitialState, T const& anEndState, P const& aPredicate, uint aSizeHint = 0)
+GC_Optional<CostType> RunDijsktraLongStep(T const& anInitialState, T const& anEndState, P const& aPredicate, uint aSizeHint = 0, T* aWinner = nullptr)
 {
 	GC_DynamicArray<GC_Pair<CostType, ListType>> queue;
 	queue.Reserve(aSizeHint);
@@ -450,7 +450,12 @@ GC_Optional<CostType> RunDijsktraLongStep(T const& anInitialState, T const& anEn
 			continue;
 
 		if (candidate == anEndState)
+		{
+			if (aWinner)
+				*aWinner = GC_Move(candidate);
+
 			return cost;
+		}
 
 		aPredicate(candidate, addToQueue);
 	}
