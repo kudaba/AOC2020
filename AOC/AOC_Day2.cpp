@@ -75,5 +75,5 @@ static auto locPart2(char const* aFile)
 DEFINE_TEST_G(Part2, Day2)
 {
 	TEST_EQ(locPart2("AOC_Day2Test.txt"), 12);
-	TEST_EQ(locPart2("AOC_Day2Part1.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day2Part1.txt"), 9541);
 }
