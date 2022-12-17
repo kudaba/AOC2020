@@ -64,7 +64,7 @@ static auto locPart2(char const* aFile)
 		bool operator==(Pos other) const { return c == 'a' || (P == other.P); }
 	};
 
-	return RunDijsktraShortStep<Pos>({ end, 'z' }, {map.Size(), 0}, [&](auto pos, auto add)
+	return RunDijsktraShortStep(Pos { end, 'z' }, Pos {map.Size(), 0}, [&](auto pos, auto add)
 		{
 			for (auto dire : GC_Cardinal::Range())
 			{
