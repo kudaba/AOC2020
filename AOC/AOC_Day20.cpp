@@ -13,22 +13,25 @@ static auto locPart2(char const* aFile, int64 mult, int rounds)
 {
 	auto data = locParseData2(aFile);
 
-	GC_DynamicArray<int64*> workingSet;
+	GC_DynamicArray<uint16> workingSet;
 	workingSet.Resize(data.Count());
 
+	uint Zero = 0;
 	for_index(auto& d : data)
 	{
 		d *= mult;
-		workingSet[i] = &d;
+		workingSet[i] = (uint16)i;
+		if (!d)
+			Zero = i;
 	}
 
 	for_range_v(r, rounds)
 	{
-		for (auto& d : data)
+		for_index_v(di, auto& d : data)
 		{
 			if (!d) continue;
 
-			int i = workingSet.Find(&d);
+			int i = workingSet.Find(di);
 			int j = i;
 			if (d > 0)
 			{
@@ -45,21 +48,21 @@ static auto locPart2(char const* aFile, int64 mult, int rounds)
 
 			if (i < j)
 			{
-				GC_MemMove(&workingSet[i], &workingSet[i + 1], (j - i) * sizeof(int64));
-				workingSet[j] = &d;
+				GC_MemMove(&workingSet[i], &workingSet[i + 1], (j - i) * sizeof(uint16));
+				workingSet[j] = (uint16)di;
 			}
 			else if (i > j)
 			{
-				GC_MemMove(&workingSet[j + 1], &workingSet[j], (i - j) * sizeof(int64));
-				workingSet[j] = &d;
+				GC_MemMove(&workingSet[j + 1], &workingSet[j], (i - j) * sizeof(uint16));
+				workingSet[j] = (uint16)di;
 			}
 		}
 	}
 
-	int i = workingSet.FindIf([](auto j) { return *j == 0; });
+	int i = workingSet.Find(Zero);
 	int64 result = 0;
 	for_range_v(t, 3)
-		result += *workingSet[((t+1) * 1000 + i) % data.Count()];
+		result += data[workingSet[((t+1) * 1000 + i) % data.Count()]];
 	return result;
 }
 
