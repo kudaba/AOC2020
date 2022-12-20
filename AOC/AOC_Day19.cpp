@@ -48,7 +48,7 @@ static uint locGetMax(BluePrint const& bp, uint minutes)
 	GC_DynamicArray<State> states;
 	states.Reserve(5000000);
 
-	for_range(4)
+	for_range(2)
 	{
 		State s;
 		s.choice = i;
@@ -91,12 +91,21 @@ static uint locGetMax(BluePrint const& bp, uint minutes)
 				{
 					s.choice = 3;
 				}
+				else if (s.robots[2])
+				{
+					s.choice = 1;
+					State ns = s;
+					ns.choice = 2;
+					states.Add(ns);
+					ns.choice = 3;
+					states.Add(ns);
+				}
 				else
 				{
 					State ns = s;
 					uint const choice = s.choice;
 
-					for_range_v(c, 4u)
+					for_range_v(c, 3u)
 						if (c != choice && ns.robots[c] < maxRobots[c])
 						{
 							ns.choice = c;
