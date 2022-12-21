@@ -232,8 +232,12 @@
       <Filter>Week1\Day4</Filter>
     </ClInclude>
     <ClInclude Include="..\README.md" />
-    <ClInclude Include="AOC_Day21Part1.txt" />
-    <ClInclude Include="AOC_Day21Test.txt" />
+    <ClInclude Include="AOC_Day21Part1.txt">
+      <Filter>Week3\Day21</Filter>
+    </ClInclude>
+    <ClInclude Include="AOC_Day21Test.txt">
+      <Filter>Week3\Day21</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Week1">
