@@ -4,84 +4,89 @@ static auto locPart1(char const* aFile, uint rounds)
 {
 	auto map = GC_File::Parse2d<bool>(aFile, [](char c) { return c == '#'; });
 
-	struct Elf
-	{
-		GC_Optional<GC_Cardinal> Proposed;
-	};
+	uint const extra = 200;
 
-	GC_HashMap<GC_Vector2i, Elf> elves;
+	GC_DynamicArray<GC_KeyValuePair<GC_Vector2u, GC_Optional<uint>>> elves;
 	for_range2d(map.Width(), map.Height())
 		if (map(x, y))
-			elves.Add(GC_Vector2i(x, y), {});
+			elves.Add({ GC_Vector2u(x + extra, y + extra), {} });
 
-	GC_Function<bool(GC_Vector2i)> rules[] =
+	map.Initialize(map.Size() + GC_Vector2u(extra) * 2, false);
+
+	for (auto& elf : elves)
+		map(elf.Key) = true;
+
+	GC_Vector2i Dirs[8] =
 	{
-		[&](GC_Vector2i p) { return !(elves.Contains(p + GC_Vector2(-1,1)) || elves.Contains(p + GC_Vector2(0,1)) || elves.Contains(p + GC_Vector2(1,1))); },
-		[&](GC_Vector2i p) { return !(elves.Contains(p + GC_Vector2(1,-1)) || elves.Contains(p + GC_Vector2(1,0)) || elves.Contains(p + GC_Vector2(1,1))); },
-		[&](GC_Vector2i p) { return !(elves.Contains(p + GC_Vector2(-1,-1)) || elves.Contains(p + GC_Vector2(0,-1)) || elves.Contains(p + GC_Vector2(1,-1))); },
-		[&](GC_Vector2i p) { return !(elves.Contains(p + GC_Vector2(-1,-1)) || elves.Contains(p + GC_Vector2(-1,0)) || elves.Contains(p + GC_Vector2(-1,1))); },
+		{-1,-1}, {0, -1},
+		{1,1}, {0, 1},
+		{-1,1}, {-1, 0},
+		{1,-1}, {1, 0},
 	};
-	GC_Cardinal Dirs[4] = { GC_Cardinal::South, GC_Cardinal::North, GC_Cardinal::West, GC_Cardinal::East };
+	uint Bits[4] =
+	{
+		0b01000011,
+		0b00011100,
+		0b00110001,
+		0b11000100,
+	};
 
-	GC_HashMap<GC_Vector2i, uint> proposals;
-	GC_HashMap<GC_Vector2i, Elf> elves2;
-	elves2.Reserve(elves.Count());
+	GC_HashMap<GC_Vector2u, uint> proposals;
+	proposals.Reserve(elves.Count());
+
 	for_range_v(r, rounds)
 	{
 		proposals.Clear();
 
 		for (auto& elf : elves)
 		{
-			bool any = false;
-			for_range2d(3, 3)
+			uint8 any = 0;
+			for_range(8)
 			{
-				GC_Vector2i off(x - 1, y - 1);
-				if ((off.x || off.y) && elves.Contains(elf.Key + off))
-				{
-					any = true;
-					break;
-				}
+				any |= map(elf.Key + Dirs[i]) << i;
 			}
 
 			if (any)
 			for_range(4)
 			{
-				GC_Cardinal dir = Dirs[(i + r) % 4];
-				if (rules[dir](elf.Key))
+				uint rot = (i + r) % 4;
+				if (!(any & Bits[rot]))
 				{
-					elf.Value.Proposed = dir;
-					GC_Vector2u n = elf.Key + GC_CardinalDirection(elf.Value.Proposed.Get());
-					if (uint* p = proposals.Find(n))
-						(*p)++;
+					GC_Vector2i next = elf.Key + Dirs[rot * 2 + 1];
+
+					auto item = proposals.Add(next);
+					if (item.First)
+						*item.Second = 0;
 					else
-						proposals.Add(n, 0);
+						(*item.Second)++;
+
+					elf.Value = (uint)(GC_AddressDiff(&proposals.First().Value, item.Second) / sizeof(proposals.First()));
+
 					break;
 				}
 			}
 		}
 
-		elves2.Clear();
+		if (proposals.Count() == 0)
+			return r + 1;
 
 		for (auto& elf : elves)
 		{
-			GC_Vector2i np = elf.Key;
-
-			if (elf.Value.Proposed.IsSet())
+			if (uint const* n = elf.Value.TryGet())
 			{
-				GC_Vector2u n = elf.Key + GC_CardinalDirection(elf.Value.Proposed.Get());
-				if (proposals[n] == 0)
+				auto const& p = proposals.GetByIndex(*n);
+				if (p.Value == 0)
 				{
-					np = n;
+					map(elf.Key) = false;
+					map(p.Key) = true;
+					elf.Key = p.Key;
 				}
+				elf.Value.Reset();
 			}
-
-			elves2.Add(np, Elf());
 		}
-
-		elves.Swap(elves2);
 	}
 
-	GC_Vector2i min(INT_MAX), max(INT_MIN);
+	GC_Vector2u min(UINT_MAX), max(0);
 	for (auto& elf : elves)
 	{
 		min = GC_Min(min, elf.Key);
@@ -97,98 +102,8 @@ DEFINE_TEST_G(Part1, Day23)
 	TEST_EQ(locPart1("AOC_Day23Part1.txt", 10), 3815);
 }
 
-static auto locPart2(char const* aFile)
-{
-	auto map = GC_File::Parse2d<bool>(aFile, [](char c) { return c == '#'; });
-
-	struct Elf
-	{
-		GC_Optional<GC_Cardinal> Proposed;
-	};
-
-	GC_HashMap<GC_Vector2i, Elf> elves;
-	for_range2d(map.Width(), map.Height())
-		if (map(x, y))
-			elves.Add(GC_Vector2i(x, y), {});
-
-	GC_Function<bool(GC_Vector2i)> rules[] =
-	{
-		[&](GC_Vector2i p) { return !(elves.Contains(p + GC_Vector2(-1,1)) || elves.Contains(p + GC_Vector2(0,1)) || elves.Contains(p + GC_Vector2(1,1))); },
-		[&](GC_Vector2i p) { return !(elves.Contains(p + GC_Vector2(1,-1)) || elves.Contains(p + GC_Vector2(1,0)) || elves.Contains(p + GC_Vector2(1,1))); },
-		[&](GC_Vector2i p) { return !(elves.Contains(p + GC_Vector2(-1,-1)) || elves.Contains(p + GC_Vector2(0,-1)) || elves.Contains(p + GC_Vector2(1,-1))); },
-		[&](GC_Vector2i p) { return !(elves.Contains(p + GC_Vector2(-1,-1)) || elves.Contains(p + GC_Vector2(-1,0)) || elves.Contains(p + GC_Vector2(-1,1))); },
-	};
-	GC_Cardinal Dirs[4] = { GC_Cardinal::South, GC_Cardinal::North, GC_Cardinal::West, GC_Cardinal::East };
-
-	GC_HashMap<GC_Vector2i, uint> proposals;
-	GC_HashMap<GC_Vector2i, Elf> elves2;
-	elves2.Reserve(elves.Count());
-	uint round = 0;
-	while(1)
-	{
-		proposals.Clear();
-
-		for (auto& elf : elves)
-		{
-			bool any = false;
-			for_range2d(3, 3)
-			{
-				GC_Vector2i off(x - 1, y - 1);
-				if ((off.x || off.y) && elves.Contains(elf.Key + off))
-				{
-					any = true;
-					break;
-				}
-			}
-
-			if (any)
-				for_range(4)
-			{
-				GC_Cardinal dir = Dirs[(i + round) % 4];
-				if (rules[dir](elf.Key))
-				{
-					elf.Value.Proposed = dir;
-					GC_Vector2u n = elf.Key + GC_CardinalDirection(elf.Value.Proposed.Get());
-					if (uint* p = proposals.Find(n))
-						(*p)++;
-					else
-						proposals.Add(n, 0);
-					break;
-				}
-			}
-		}
-
-		++round;
-
-		if (proposals.Count() == 0)
-			return round;
-
-		elves2.Clear();
-
-		for (auto& elf : elves)
-		{
-			GC_Vector2i np = elf.Key;
-
-			if (elf.Value.Proposed.IsSet())
-			{
-				GC_Vector2u n = elf.Key + GC_CardinalDirection(elf.Value.Proposed.Get());
-				if (proposals[n] == 0)
-				{
-					np = n;
-				}
-			}
-
-			elves2.Add(np, Elf());
-		}
-
-		elves.Swap(elves2);
-	}
-
-	return 0u;
-}
-
 DEFINE_TEST_G(Part2, Day23)
 {
-	TEST_EQ(locPart2("AOC_Day23Test.txt"), 20);
-	TEST_EQ(locPart2("AOC_Day23Part1.txt"), 893);
+	TEST_EQ(locPart1("AOC_Day23Test.txt", UINT_MAX), 20);
+	TEST_EQ(locPart1("AOC_Day23Part1.txt", UINT_MAX), 893);
 }
