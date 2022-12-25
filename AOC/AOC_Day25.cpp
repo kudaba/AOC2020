@@ -1,54 +1,81 @@
 #include "AOC_Precompiled.h"
 
-static auto locParseData(char const* aFile)
+int64 locParse(GC_StrSlice line)
 {
-	// By line with parse function
-	return GC_File::Parse<int>(aFile, [](auto aLine)
+	int64 val = 0;
+	int64 mult = 1;
+	for (int i = line.Count() - 1; i >= 0; --i)
+	{
+		int64 v = 0;
+		switch (line[i])
 		{
-			return GC_Atoi(aLine);
-		});
+		case '0':
+		case '1':
+		case '2':
+			v = line[i] - '0';
+			break;
+		case '-':
+			v = -1; break;
+		case '=':
+			v = -2; break;
+		default:
+			GC_UNREACHABLE();
+
+		}
+		val += v * mult;
+		mult *= 5;
+	}
+	return val;
 }
 
 static auto locPart1(char const* aFile)
 {
-	uint64 result = 0;
+	int64 result = 0;
 
-	for (auto item : locParseData(aFile))
-	{
-		(void)item;
-	}
-
-	// By line parsing
 	for (auto line : GC_File::ReadAllLines(aFile))
 	{
+		result += locParse(line);
 	}
 
-	// By Block parsing (block of lines separate by two new lines)
-	GC_String text;
-	GC_File::ReadAllText(aFile, text);
-	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
+	int64 r = result;
+
+	// 1, 5, 25, 125, 625, 3125
+
+	char resultString[64] = {};
+	uint ri = 62;
+	while (result)
 	{
-
+		int remainder = 0;
+		char v = result % 5;
+		switch (v)
+		{
+		case 0:
+		case 1:
+		case 2:
+			resultString[ri] = '0' + v;
+			break;
+		case 3:
+			resultString[ri] = '=';
+			++remainder;
+			break;
+		case 4:
+			resultString[ri] = '-';
+			++remainder;
+			break;
+		}
+		--ri;
+		result /= 5;
+		result += remainder;
 	}
 
-	return result;
+
+	GC_ASSERT(locParse(GC_StrSlice(resultString + ri + 1, 64 - ri - 2)) == r);
+
+	return GC_String(resultString + ri + 1);
 }
 
 DEFINE_TEST_G(Part1, Day25)
 {
-	TEST_EQ(locPart1("AOC_Day25Test.txt"), 0);
-	TEST_EQ(locPart1("AOC_Day25Part1.txt"), 0);
-}
-
-static auto locPart2(char const* aFile)
-{
-	(void)aFile;
-	uint64 result = 0;
-	return result;
-}
-
-DEFINE_TEST_G(Part2, Day25)
-{
-	TEST_EQ(locPart2("AOC_Day25Test.txt"), 0);
-	TEST_EQ(locPart2("AOC_Day25Part1.txt"), 0);
+	TEST_STR_EQ(locPart1("AOC_Day25Test.txt"), "2=-1=0");
+	TEST_STR_EQ(locPart1("AOC_Day25Part1.txt"), "20===-20-020=0001-02");
 }
