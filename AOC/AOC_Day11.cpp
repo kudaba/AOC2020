@@ -1,73 +1,54 @@
 #include "AOC_Precompiled.h"
 
-static auto locPart1(char const* aFile, uint rounds, uint worry)
+static auto locParseData(char const* aFile)
 {
-	struct Monkey
-	{
-		GC_DynamicArray<uint64> items;
-		bool Add;
-		uint Count;
-		uint Mod;
-		uint Targets[2];
-		uint64 Inspect = 0;
-	};
-
-	GC_DynamicArray<Monkey> monkeys;
-
-	uint64 superMod = 1;
-
-	GC_String text = GC_File::ReadAllText(aFile);
-	for (GC_StrSlice monkey : GC_StrSplit(text, "\n\n"))
-	{
-		Monkey& current = monkeys.Add();
-		auto parts = GC_StrSplit<6>(monkey, '\n');
+	// By line with parse function
+	return GC_File::Parse<int>(aFile, [](auto aLine)
 		{
-			for (GC_StrSlice item : GC_StrSplit<8>(GC_StrSplit<2>(parts[1], ": ")[1], ", "))
-			{
-				current.items.Add(GC_Atoi(item));
-			}
-		}
-		{
-			auto op = GC_StrSplit<2>(GC_StrSplit<2>(parts[2], "old ")[1], ' ');
-			current.Add = op[0][0] == '+';
-			current.Count = GC_Atoi(op[1]);
-		}
-		current.Mod = GC_Atoi(GC_StrSplit<2>(parts[3], " by ")[1]);
-		current.Targets[1] = GC_Atoi(GC_StrSplit<2>(parts[4], " monkey ")[1]);
-		current.Targets[0] = GC_Atoi(GC_StrSplit<2>(parts[5], " monkey ")[1]);
+			return GC_Atoi(aLine);
+		});
+}
 
-		superMod *= current.Mod;
+static auto locPart1(char const* aFile)
+{
+	uint64 result = 0;
+
+	for (auto item : locParseData(aFile))
+	{
+		(void)item;
 	}
 
-	for_range(rounds)
+	// By line parsing
+	for (auto line : GC_File::ReadAllLines(aFile))
 	{
-		for (Monkey& monkey : monkeys)
-		{
-			monkey.Inspect += monkey.items.Count();
-
-			for (uint64 item : monkey.items)
-			{
-				item = ((monkey.Add ? (item + monkey.Count) : (item * (monkey.Count ? monkey.Count : item))) / worry) % superMod;
-				monkeys[monkey.Targets[!(item % monkey.Mod)]].items.Add(item);
-			}
-
-			monkey.items.Clear();
-		}
 	}
 
-	monkeys.Sort([](Monkey& l, Monkey& r) {return l.Inspect > r.Inspect; });
+	// By Block parsing (block of lines separate by two new lines)
+	GC_String text;
+	GC_File::ReadAllText(aFile, text);
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
+	{
 
-	return monkeys[0].Inspect * monkeys[1].Inspect;
+	}
+
+	return result;
 }
 
 DEFINE_TEST_G(Part1, Day11)
 {
-	TEST_EQ(locPart1("AOC_Day11Test.txt", 20, 3), 10605);
-	TEST_EQ(locPart1("AOC_Day11Part1.txt", 20, 3), 64032);
+	TEST_EQ(locPart1("AOC_Day11Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day11Part1.txt"), 0);
+}
+
+static auto locPart2(char const* aFile)
+{
+	(void)aFile;
+	uint64 result = 0;
+	return result;
 }
 
 DEFINE_TEST_G(Part2, Day11)
 {
-	TEST_EQ(locPart1("AOC_Day11Test.txt", 10000, 1), 2713310158);
-	TEST_EQ(locPart1("AOC_Day11Part1.txt", 10000, 1), 12729522272);
+	TEST_EQ(locPart2("AOC_Day11Test.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day11Part1.txt"), 0);
 }

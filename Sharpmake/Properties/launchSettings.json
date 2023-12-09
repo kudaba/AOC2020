@@ -2,9 +2,9 @@
   "profiles": {
     "AOC": {
       "commandName": "Executable",
-      "commandLineArgs": "/sources(@\u0027D:\\git\\AOC2020\\SharpMake\\Main.cs\u0027) ",
-      "executablePath": "D:\\git\\AOC2020\\Graphium\\bin\\Sharpmake\\win-x64\\Sharpmake.Application.exe",
-      "workingDirectory": "D:\\git\\AOC2020"
+      "commandLineArgs": "/sources(@\u0027C:\\Users\\christian.savoie\\Documents\\AOC2020\\SharpMake\\Main.cs\u0027) ",
+      "executablePath": "C:\\Users\\christian.savoie\\Documents\\AOC2020\\Graphium\\bin\\Sharpmake\\win-x64\\Sharpmake.Application.exe",
+      "workingDirectory": "C:\\Users\\christian.savoie\\Documents\\AOC2020"
     }
   }
 }

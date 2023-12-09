@@ -1,53 +1,34 @@
 #include "AOC_Precompiled.h"
 
+static auto locParseData(char const* aFile)
+{
+	// By line with parse function
+	return GC_File::Parse<int>(aFile, [](auto aLine)
+		{
+			return GC_Atoi(aLine);
+		});
+}
 
 static auto locPart1(char const* aFile)
 {
-	GC_DynamicArray<GC_DynamicArray<char>> stacks;
+	uint64 result = 0;
 
-	bool readingStacks = true;
+	for (auto item : locParseData(aFile))
+	{
+		(void)item;
+	}
 
 	// By line parsing
 	for (auto line : GC_File::ReadAllLines(aFile))
 	{
-		if (line.IsEmpty())
-			readingStacks = false;
-		else if (readingStacks)
-		{
-			for (uint i = 0; i < line.Count(); i += 4)
-			{
-				uint stack = i / 4;
-				if (line[i] == '[')
-				{
-					if (stack >= stacks.Count())
-						stacks.Resize(stack + 1);
-
-					stacks[stack].PushFront(line[i + 1]);
-				}
-			}
-		}
-		else
-		{
-			auto parts = GC_StrSplit<6>(line, ' ');
-			uint count = GC_Atoi(parts[1]);
-			uint from = GC_Atoi(parts[3]) - 1;
-			uint to = GC_Atoi(parts[5]) - 1;
-
-			for_range(count)
-			{
-				stacks[to].PushBack(stacks[from].Last());
-				stacks[from].PopBack();
-			}
-		}
 	}
 
-	GC_String result;
-	result.Reserve(stacks.Count());
-	result[stacks.Count()] = 0;
-
-	for_index(auto const& stack : stacks)
+	// By Block parsing (block of lines separate by two new lines)
+	GC_String text;
+	GC_File::ReadAllText(aFile, text);
+	for (GC_StrSlice chunk; GC_Strtok(text, "\n\n", chunk);)
 	{
-		result[i] = stack.Last();
+
 	}
 
 	return result;
@@ -55,61 +36,19 @@ static auto locPart1(char const* aFile)
 
 DEFINE_TEST_G(Part1, Day5)
 {
-	TEST_STR_EQ(locPart1("AOC_Day5Test.txt"), "CMZ");
-	TEST_STR_EQ(locPart1("AOC_Day5Part1.txt"), "WHTLRMZRC");
+	TEST_EQ(locPart1("AOC_Day5Test.txt"), 0);
+	TEST_EQ(locPart1("AOC_Day5Part1.txt"), 0);
 }
 
 static auto locPart2(char const* aFile)
 {
-	GC_DynamicArray<GC_DynamicArray<char>> stacks;
-
-	bool readingStacks = true;
-
-	// By line parsing
-	for (auto line : GC_File::ReadAllLines(aFile))
-	{
-		if (line.IsEmpty())
-			readingStacks = false;
-		else if (readingStacks)
-		{
-			for (uint i = 0; i < line.Count(); i += 4)
-			{
-				uint stack = i / 4;
-				if (line[i] == '[')
-				{
-					if (stack >= stacks.Count())
-						stacks.Resize(stack + 1);
-
-					stacks[stack].PushFront(line[i + 1]);
-				}
-			}
-		}
-		else
-		{
-			auto parts = GC_StrSplit<6>(line, ' ');
-			uint count = GC_Atoi(parts[1]);
-			uint from = GC_Atoi(parts[3]) - 1;
-			uint to = GC_Atoi(parts[5]) - 1;
-
-			stacks[to] += stacks[from].Right(count);
-			stacks[from].Resize(stacks[from].Count() - count);
-		}
-	}
-
-	GC_String result;
-	result.Reserve(stacks.Count());
-	result[stacks.Count()] = 0;
-
-	for_index(auto const& stack : stacks)
-	{
-		result[i] = stack.Last();
-	}
-
+	(void)aFile;
+	uint64 result = 0;
 	return result;
 }
 
 DEFINE_TEST_G(Part2, Day5)
 {
-	TEST_STR_EQ(locPart2("AOC_Day5Test.txt"), "MCD");
-	TEST_STR_EQ(locPart2("AOC_Day5Part1.txt"), "GMPMLWNMG");
+	TEST_EQ(locPart2("AOC_Day5Test.txt"), 0);
+	TEST_EQ(locPart2("AOC_Day5Part1.txt"), 0);
 }
