@@ -137,7 +137,7 @@ namespace GC_Algorithm
 	template <typename T>
 	auto Min(T const& anInput)
 	{
-		auto result = anInput[0];
+		auto result = anInput.First();
 		for (auto const& i : anInput)
 			result = GC_Min(result, i);
 		return result;
@@ -145,7 +145,7 @@ namespace GC_Algorithm
 	template <typename T, typename U>
 	auto Min(T const& anInput, U const& aPredicate)
 	{
-		auto result = aPredicate(anInput[0]);
+		auto result = aPredicate(anInput.First());
 		for (auto const& i : anInput)
 			result = GC_Min(result, aPredicate(i));
 		return result;
@@ -154,9 +154,17 @@ namespace GC_Algorithm
 	template <typename T>
 	auto Max(T const& anInput)
 	{
-		auto result = anInput[0];
+		auto result = anInput.First();
 		for (auto const& i : anInput)
 			result = GC_Max(result, i);
+		return result;
+	}
+	template <typename T, typename U>
+	auto Max(T const& anInput, U const& aPredicate)
+	{
+		auto result = aPredicate(anInput.First());
+		for (auto const& i : anInput)
+			result = GC_Max(result, aPredicate(i));
 		return result;
 	}
 
