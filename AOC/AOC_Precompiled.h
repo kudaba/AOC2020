@@ -214,6 +214,51 @@ namespace GC_Algorithm
 	}
 }
 
+namespace GC_Math
+{
+	// Calculate the prime factors that multiply into this value
+	inline void GetFactors(uint aNumber, GC_HashMap<uint, uint>& aFactorsOut)
+	{
+		uint factor = 2;
+		for (; factor < aNumber / factor; ++factor)
+		{
+			if (!(aNumber % factor))
+			{
+				GetFactors(factor, aFactorsOut);
+				GetFactors(aNumber / factor, aFactorsOut);
+				return;
+			}
+		}
+
+		++aFactorsOut.GetOrAdd(aNumber, 0);
+	}
+
+	// Calculate the small number that's evenly divided by all the input numbers
+	inline uint64 GetLowestCommonMultiple(GC_ArrayRange<uint> someNumbers)
+	{
+		GC_HashMap<uint, uint> commonFactors;
+
+		GC_HashMap<uint, uint> factors;
+		for (uint n : someNumbers)
+		{
+			factors.Clear();
+			GetFactors(n, factors);
+			for (auto const& iter : factors)
+			{
+				uint& count = commonFactors.GetOrAdd(iter.Key, iter.Value);
+				count = GC_Max(count, iter.Value);
+			}
+		}
+
+		uint64 result = 1;
+		for (auto const& iter : commonFactors)
+		{
+			result *= GC_ConstPow(iter.Key, iter.Value);
+		}
+		return result;
+	}
+}
+
 template <uint Size>
 struct GC_StrSplitType
 {
