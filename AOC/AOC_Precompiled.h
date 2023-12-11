@@ -169,7 +169,39 @@ namespace GC_Algorithm
 	}
 
 	template <typename Type, typename Predicate>
-	void FloodFillRecursive(GC_ArrayRange2D<Type> const& aGrid, GC_BitVector& aVisited, GC_Vector2u aPosition, Predicate const& aPredicate)
+	void FloodFillHeap(GC_ArrayRange2D<Type> aGrid, GC_BitVector& aVisited, GC_Vector2u aPosition, Predicate const& aPredicate)
+	{
+		GC_DynamicArray<GC_Vector2u> positions;
+		positions.Add(aPosition);
+
+		while (positions.Count())
+		{
+			GC_Vector2u pos = positions.Last();
+			positions.PopBack();
+
+			{
+				uint const index = pos.y * aGrid.Width() + pos.x;
+				aVisited.SetValue(index, true);
+			}
+
+			if (aPredicate(aGrid(pos)))
+			{
+				for (GC_Cardinal dirType : GC_Cardinal::Range())
+				{
+					GC_Vector2i np = pos + GC_CardinalVector(dirType);
+					if (np >= GC_Vector2i(0) && np < aGrid.Size())
+					{
+						uint const index = np.y * aGrid.Width() + np.x;
+						if (!aVisited.GetValue(index))
+							positions.Add(np);
+					}
+				}
+			}
+		}
+	}
+
+	template <typename Type, typename Predicate>
+	void FloodFillRecursive(GC_ArrayRange2D<Type> aGrid, GC_BitVector& aVisited, GC_Vector2u aPosition, Predicate const& aPredicate)
 	{
 		uint const index = aPosition.y * aGrid.Width() + aPosition.x;
 		if (aVisited.GetValue(index))
@@ -187,7 +219,7 @@ namespace GC_Algorithm
 	}
 
 	template <typename Type, typename Predicate>
-	void FloodFill(GC_ArrayRange2D<Type> const& aGrid, GC_Vector2u aStart, Predicate const& aPredicate)
+	void FloodFill(GC_ArrayRange2D<Type> aGrid, GC_Vector2u aStart, Predicate const& aPredicate)
 	{
 		GC_BitVector visited;
 		visited.Resize(aGrid.Count());
