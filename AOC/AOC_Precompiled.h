@@ -64,17 +64,22 @@ namespace GC_File
 	}
 
 	template <typename T>
-	GC_DynamicArray2D<T> Parse2d(char const* aFile, GC_Function<T (char c)> aRead)
+	GC_DynamicArray2D<T> Parse2d(const GC_DynamicArray<GC_StrSlice>& someLines, GC_Function<T(char c)> aRead)
 	{
-		auto lines = GC_File::ReadAllLines(aFile);
-		auto tokens = lines.GetAll();
 		GC_DynamicArray2D<T> data;
-		data.SetSize({ tokens[0].Count(), tokens.Count() });
+		data.SetSize({ someLines[0].Count(), someLines.Count() });
 
-		for_index_v(y, GC_StrSlice const& l : tokens)
+		for_index_v(y, GC_StrSlice const& l : someLines)
 			for_index_v(x, char c : l)
 			data(x, y) = aRead(c);
 		return data;
+	}
+
+	template <typename T>
+	GC_DynamicArray2D<T> Parse2d(char const* aFile, GC_Function<T (char c)> aRead)
+	{
+		auto lines = GC_File::ReadAllLines(aFile);
+		return Parse2d(lines.GetAll(), aRead);
 	}
 
 	template <typename T>
@@ -166,6 +171,19 @@ namespace GC_Algorithm
 		for (auto const& i : anInput)
 			result = GC_Max(result, aPredicate(i));
 		return result;
+	}
+
+	template <typename T, typename U>
+	auto ArrayEqual(T const& aLHS, U const& aRHS)
+	{
+		if (aLHS.Count() != aRHS.Count())
+			return false;
+
+		for_range(aLHS.Count())
+			if (aLHS[i] != aRHS[i])
+				return false;
+
+		return true;
 	}
 
 	template <typename Type, typename Predicate>
